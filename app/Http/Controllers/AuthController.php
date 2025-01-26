@@ -28,7 +28,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.index');
         }
 
         return redirect()->back()->withErrors(['error' => 'Email atau password salah']);
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
         if ($user && $user->role === 'mahasiswa') {
             Auth::login($user);
-            return redirect()->route('mahasiswa.dashboard');
+            return redirect()->route('mahasiswa.index');
         }
 
         return redirect()->back()->withErrors(['error' => 'Nama atau NIM salah']);
@@ -58,16 +58,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('auth.admin-login');
-    }
-
-    public function adminDashboard()
-    {
-        return view('admin.dashboard');
-    }
-
-    public function mahasiswaDashboard()
-    {
-        return view('mahasiswa.dashboard');
+        return redirect()->route('auth.mhs-login')->with('success', 'Logout Berhasil');
     }
 }

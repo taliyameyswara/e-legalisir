@@ -20,13 +20,28 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Admin Routes
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'adminDashboard'])->name('dashboard');
+    // Route::get('/dashboard', [AuthController::class, 'adminDashboard'])->name('dashboard');
 });
 
 
 // Mahasiswa Routes
-Route::middleware(['auth', 'role:mahasiswa'])->prefix('mahasiswa')->name('mahasiswa.')->group(function () {
-    Route::get('/dashboard', [DocumentController::class, 'dashboard'])->name('dashboard');
-    Route::post('/documents/store', [DocumentController::class, 'store'])->name('documents.store');
-    Route::post('/documents/submit', [DocumentController::class, 'submit'])->name('documents.submit');
+Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
+    // dashboard route
+    Route::get('mahasiswa/dashboard', function () {
+        return view('mahasiswa.index');
+    })->name('mahasiswa.index');
+
+    // legalisir route
+    Route::prefix('mahasiswa/dashboard/legalisir')->name('mahasiswa.legalisir.')->group(function () {
+        Route::get('/', [DocumentController::class, 'index'])->name('index');
+        Route::post('/store', [DocumentController::class, 'store'])->name('store');
+        Route::post('/submit', [DocumentController::class, 'submit'])->name('submit');
+    });
+
+    // riwayat route
+    Route::prefix('mahasiswa/dashboard/riwayat')->name('mahasiswa.riwayat.')->group(function () {
+        Route::get('/', function () {
+            return view('mahasiswa.riwayat.index');
+        })->name('index');
+    });
 });
