@@ -2,20 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Document extends Model
+class Transaction extends Model
 {
-    use HasFactory;
-    protected $table = 'documents';
     protected $guarded = [];
-    // Relasi dengan User (mahasiswa)
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-    
-
 }

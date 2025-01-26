@@ -30,11 +30,6 @@ class User extends Authenticatable
         return $this->hasMany(Document::class);
     }
 
-    // Relasi dengan Log (jika perlu)
-    public function logs()
-    {
-        return $this->hasMany(Log::class, 'admin_id');
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,5 +52,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }

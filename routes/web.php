@@ -2,13 +2,14 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect()->route('mhs-login');
+    return redirect()->route('login');
 });
 
-Route::get('/login', [AuthController::class, 'showMahasiswaLogin'])->name('mhs-login');
+Route::get('/login', [AuthController::class, 'showMahasiswaLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'loginMahasiswa'])->name('login.mahasiswa');
 
 Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin-login');
@@ -35,13 +36,14 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::prefix('mahasiswa/dashboard/legalisir')->name('mahasiswa.legalisir.')->group(function () {
         Route::get('/', [DocumentController::class, 'index'])->name('index');
         Route::post('/store', [DocumentController::class, 'store'])->name('store');
-        Route::post('/submit', [DocumentController::class, 'submit'])->name('submit');
     });
 
-    // riwayat route
-    Route::prefix('mahasiswa/dashboard/riwayat')->name('mahasiswa.riwayat.')->group(function () {
-        Route::get('/', function () {
-            return view('mahasiswa.riwayat.index');
-        })->name('index');
+    // riwayat transaksi route
+    Route::prefix('mahasiswa/dashboard/transaksi')->name('mahasiswa.transaksi.')->group(function () {
+        Route::get('/', [TransactionController::class, 'index'])->name('index');
+        Route::get('/create', [TransactionController::class, 'create'])->name('create');
+        Route::post('/store', [TransactionController::class, 'store'])->name('store');
+        Route::get('/{id}', [TransactionController::class, 'detail'])->name('detail');
+        Route::post('/{id}/upload-bukti-pembayaran', [TransactionController::class, 'uploadPaymentProof'])->name('bukti_pembayaran');
     });
 });

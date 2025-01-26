@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -12,13 +13,14 @@ class DocumentController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $document = Document::where('user_id', $user->id)->first();
-        return view('mahasiswa.legalisir.index', compact('user', 'document'));
+        $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
+        $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
+        $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
+        return view('mahasiswa.legalisir.index', compact('user', 'file_ijazah', 'file_transkrip_1', 'file_transkrip_2'));
     }
 
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'file_ijazah' => 'nullable|mimes:jpg,jpeg,png|max:1024', // Tidak wajib jika hanya ingin mengganti sebagian
             'file_transkrip_1' => 'nullable|mimes:jpg,jpeg,png|max:1024',
@@ -32,36 +34,41 @@ class DocumentController extends Controller
             'file_transkrip_2.max' => 'Ukuran File Transkrip Nilai opsional tidak boleh lebih dari 1 MB.',
         ]);
 
-        // Ambil atau buat ulang record dokumen
-        $document = Document::updateOrCreate(
-            ['user_id' => Auth::id()],
-            ['status' => 'menunggu pembayaran']
-        );
-
         // Perbarui hanya file yang diunggah
         if ($request->hasFile('file_ijazah')) {
-            if ($document->file_ijazah) {
-                Storage::disk('public')->delete($document->file_ijazah); // Hapus file lama
-            }
-            $document->file_ijazah = $request->file('file_ijazah')->store('documents', 'public');
+            // update semua dokuemn where user_id, type, is_active menjadi false
+            Document::where('user_id', Auth::id())->where('type', 'file_ijazah')->update(['is_active' => false]);
+            Document::create([
+                'user_id' => Auth::id(),
+                'file' => $request->file('file_ijazah')->store('documents', 'public'),
+                'file_name' => $request->file('file_ijazah')->getClientOriginalName(),
+                'type' => 'file_ijazah',
+                'is_active' => true,
+            ]);
+            // $document->file_ijazah = $request->file('file_ijazah')->store('documents', 'public');
         }
 
         if ($request->hasFile('file_transkrip_1')) {
-            if ($document->file_transkrip_1) {
-                Storage::disk('public')->delete($document->file_transkrip_1); // Hapus file lama
-            }
-            $document->file_transkrip_1 = $request->file('file_transkrip_1')->store('documents', 'public');
+            Document::where('user_id', Auth::id())->where('type', 'file_transkrip_1')->update(['is_active' => false]);
+            Document::create([
+                'user_id' => Auth::id(),
+                'file' => $request->file('file_transkrip_1')->store('documents', 'public'),
+                'file_name' => $request->file('file_transkrip_1')->getClientOriginalName(),
+                'type' => 'file_transkrip_1',
+                'is_active' => true,
+            ]);
         }
 
         if ($request->hasFile('file_transkrip_2')) {
-            if ($document->file_transkrip_2) {
-                Storage::disk('public')->delete($document->file_transkrip_2); // Hapus file lama
-            }
-            $document->file_transkrip_2 = $request->file('file_transkrip_2')->store('documents', 'public');
+            Document::where('user_id', Auth::id())->where('type', 'file_transkrip_2')->update(['is_active' => false]);
+            Document::create([
+                'user_id' => Auth::id(),
+                'file' => $request->file('file_transkrip_2')->store('documents', 'public'),
+                'file_name' => $request->file('file_transkrip_2')->getClientOriginalName(),
+                'type' => 'file_transkrip_2',
+                'is_active' => true,
+            ]);
         }
-
-        // Simpan perubahan
-        $document->save();
 
         // Redirect ke halaman riwayat dengan pesan sukses
         return redirect()->route('mahasiswa.legalisir.index')->with('success', 'Dokumen berhasil diunggah atau diperbarui!');

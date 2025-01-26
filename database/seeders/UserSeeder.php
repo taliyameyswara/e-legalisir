@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Student;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,10 +23,19 @@ class UserSeeder extends Seeder
         ]);
 
         // Membuat mahasiswa
-        User::create([
+        $user = User::create([
             'name' => 'Ahmad Rizki',
             'nim' => '1234567890',
             'role' => 'mahasiswa',
+        ]);
+
+        Student::create([
+            'user_id' => $user->id,
+            'tanggal_lahir' => '2000-01-01',
+            'tempat_lahir' => 'Jakarta',
+            'program_studi' => 'Informatika',
+            'nomor_sk_rektor' => 'SKR-12345',
+            'nomor_ijazah' => 'IJZ-98765',
         ]);
     }
 }

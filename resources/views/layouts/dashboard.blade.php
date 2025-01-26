@@ -16,11 +16,11 @@
     <div id="sidebar"
         class="fixed top-0 left-0 h-[96%] bg-white w-60 rounded-3xl transition-all duration-300 z-50 m-4 border">
         <div class="px-5 py-6">
-            <h2 class="text-lg font-bold text-cyan-700 mb-4">E-Legalisir App</h2>
+            <h2 class="text-lg font-bold text-cyan-700 mb-4">E-Legalisir Ijazah</h2>
             <ul>
                 {{-- Dashboard --}}
                 <li
-                    class="{{ Request::routeIs('mahasiswa.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : '' }}  rounded-lg mb-2 text-gray-500  text-sm">
+                    class="{{ Request::routeIs('mahasiswa.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
                     <a href="{{ route('mahasiswa.index') }}" class="flex items-center space-x-3  py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -32,7 +32,7 @@
                 </li>
                 {{-- Legalisir --}}
                 <li
-                    class="{{ Request::routeIs('mahasiswa.legalisir.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : '' }}  rounded-lg mb-2 text-gray-500  text-sm">
+                    class="{{ Request::routeIs('mahasiswa.legalisir.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2  text-sm">
                     <a href="{{ route('mahasiswa.legalisir.index') }}" class="flex items-center space-x-3  py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
@@ -44,16 +44,13 @@
                 </li>
                 {{-- Riwayat Legalisir --}}
                 <li
-                    class="{{ Request::routeIs('mahasiswa.riwayat.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : '' }}  rounded-lg mb-2 text-gray-500  text-sm">
-                    <a href="{{ route('mahasiswa.riwayat.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    class="{{ Request::routeIs('mahasiswa.transaksi.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2  text-sm">
+                    <a href="{{ route('mahasiswa.transaksi.index') }}" class="flex items-center space-x-3  py-2 px-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3" />
                         </svg>
-
-
-
                         <span>Riwayat Legalisir</span>
                     </a>
                 </li>

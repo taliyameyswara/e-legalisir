@@ -32,7 +32,8 @@
                         <p class="text-gray-500 text-sm">Ajukan legalisir ijazah Anda dengan mudah.</p>
                     </div>
                 </div>
-                <a href="#" class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
+                <a href={{ route('mahasiswa.legalisir.index') }}
+                    class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
                     Lihat Selengkapnya
                 </a>
             </div>
@@ -54,7 +55,8 @@
                         <p class="text-gray-500 text-sm">Lihat riwayat pengajuan legalisir Ijazah Anda.</p>
                     </div>
                 </div>
-                <a href="#" class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
+                <a href={{ route('mahasiswa.legalisir.index') }}
+                    class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
                     Lihat Selengkapnya
                 </a>
             </div>

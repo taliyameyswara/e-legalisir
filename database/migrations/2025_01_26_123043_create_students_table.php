@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shipments', function (Blueprint $table) {
+        Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('document_id')->constrained('documents')->cascadeOnDelete();
-            $table->string('tracking_number');
-            $table->enum('status', ['pending', 'dikirim', 'diterima'])->default('pending'); 
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->date('tanggal_lahir');
+            $table->string('tempat_lahir');
+            $table->string('program_studi');
+            $table->string('nomor_sk_rektor');
+            $table->string('nomor_ijazah');
             $table->timestamps();
         });
     }
@@ -25,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipments');
+        Schema::dropIfExists('students');
     }
 };

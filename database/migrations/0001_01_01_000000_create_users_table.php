@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('password')->nullable();;
+            $table->string('password')->nullable();
             $table->enum('role', ['mahasiswa', 'admin']);
             $table->string('nim')->nullable();
             $table->timestamp('email_verified_at')->nullable();
