@@ -21,7 +21,20 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'nim',
     ];
+    // Relasi dengan Document
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    // Relasi dengan Log (jika perlu)
+    public function logs()
+    {
+        return $this->hasMany(Log::class, 'admin_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
