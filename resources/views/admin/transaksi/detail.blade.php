@@ -1,17 +1,17 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 
 @section('content')
     <div class="border border-gray-200 rounded-2xl p-5 bg-white">
-        <a href="{{ route('mahasiswa.transaksi.index') }}" class="text-cyan-600 hover:underline">
+        <a href="{{ route('admin.transaksi.index') }}" class="text-cyan-600 hover:underline">
             ← Kembali </a>
         <div class="flex justify-between items-center my-3">
             <div>
                 <h1 class="text-xl font-semibold text-cyan-700">Detail Transaksi Legalisir Ijazah</h1>
-                <p class="text-gray-600 text-sm">Berikut adalah detail transaksi yang telah diajukan.</p>
+                <p class="text-gray-600 text-sm">Berikut adalah detail transaksi yang diajukan mahasiswa.</p>
             </div>
             <p
                 class="inline-block px-4 py-2 rounded-full text-xs
-             @if ($transaction->status == 'menunggu pembayaran') bg-yellow-100 text-yellow-700 border border-yellow-300
+            @if ($transaction->status == 'menunggu pembayaran') bg-yellow-100 text-yellow-700 border border-yellow-300
             @elseif($transaction->status == 'proses legalisir') bg-cyan-500/10 border border-cyan-500/50 text-cyan-600
             @elseif($transaction->status == 'pengiriman') bg-indigo-100 text-indigo-700 border border-indigo-300
             @elseif($transaction->status == 'selesai') bg-green-100 text-green-700 border border-green-300
@@ -20,36 +20,34 @@
             </p>
         </div>
 
-
         <div class="flex gap-4 mb-4">
             <div>
                 <label class="block text-gray-700 font-semibold text-sm mb-2">File Ijazah</label>
-                <a href="{{ isset($transaction->file_ijazah) ? asset('storage/' . $transaction->file_ijazah->file) : asset('image/default.png') }}"
+                <a href="{{ $transaction->ijazah ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
                     target="_blank" id="ijazahLink">
-                    <img src="{{ isset($transaction->file_ijazah) ? asset('storage/' . $transaction->file_ijazah->file) : asset('image/default.png') }}"
+                    <img src="{{ isset($transaction->ijazah) ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
                         alt="Ijazah Preview" class="rounded-lg min-w-48 h-28 object-cover" id="ijazahPreview">
                 </a>
             </div>
             <div>
                 <label class="block text-gray-700 font-semibold text-sm mb-2">File Transkrip Nilai 1</label>
-                <a href="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
+                <a href="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
                     target="_blank" id="transkrip1Link">
-                    <img src="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
+                    <img src="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
                         alt="Transkrip 1 Preview" class="rounded-lg min-w-48 h-28 object-cover" id="transkrip1Preview">
                 </a>
             </div>
             @if (isset($transaction->file_transkrip_2))
                 <div>
                     <label class="block text-gray-700 font-semibold text-sm mb-2">File Transkrip Nilai 2</label>
-                    <a href="{{ isset($transaction->file_transkrip_2) ? asset('storage/' . $transaction->file_transkrip_2->file) : asset('image/default.png') }}"
+                    <a href="{{ isset($transaction->transkrip_2) ? asset('storage/' . $transaction->transkrip_2->file) : asset('image/default.png') }}"
                         target="_blank" id="transkrip2Link">
-                        <img src="{{ isset($transaction->file_transkrip_2) ? asset('storage/' . $transaction->file_transkrip_2->file) : asset('image/default.png') }}"
+                        <img src="{{ isset($transaction->transkrip_2) ? asset('storage/' . $transaction->transkrip_2->file) : asset('image/default.png') }}"
                             alt="Transkrip 2 Preview" class="rounded-lg min-w-48 h-28 object-cover" id="transkrip2Preview">
                     </a>
                 </div>
             @endif
         </div>
-
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- Informasi Penerima -->
@@ -101,63 +99,33 @@
                     </div>
                 </div>
 
-
-                <div class="border bg-gray-50 p-3 rounded-xl w-fit mt-4">
-                    {{-- Check if the payment is still pending --}}
-                    @if ($transaction->status == 'menunggu pembayaran')
-                        <div>
-                            Pembayaran dapat dilakukan melalui
-                            <br>
-                            Virtual Account : <strong class="text-cyan-600">16237147331</strong> (Bank Mandiri -
-                            Universitas)
-
-                            <p class="text-gray-500 text-sm my-2">Silahkan melakukan pembayaran sebesar
-                                <strong>Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}</strong>
-                                ke nomor virtual account di atas. Setelah melakukan pembayaran, silahkan upload bukti
-                                pembayaran.
-                            </p>
-
-                            <form action="{{ route('mahasiswa.transaksi.bukti_pembayaran', $transaction->id) }}"
-                                method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="flex bg-white items-center justify-between gap-2 p-2 px-4 rounded-xl border">
-                                    <input type="file" name="bukti_pembayaran" class="mt-2 mb-3 w-full">
-                                    <button type="submit"
-                                        class="bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm w-2/3">Kirim
-                                        Bukti Pembayaran</button>
+                <div class="border bg-gray-50 p-3 rounded-xl w-full mt-4">
+                    {{-- Form untuk mengisi nomor pengiriman --}}
+                    @if ($transaction->status == 'proses legalisir')
+                        <form action="{{ route('admin.transaksi.approve', $transaction->id) }}" method="POST">
+                            @csrf
+                            <div class="grid grid-cols-2 gap-3 items-center">
+                                <div class="mb-4">
+                                    <label for="nomor_pengiriman" class="block text-gray-700 font-medium text-sm">Nomor
+                                        Pengiriman</label>
+                                    <input type="text" name="nomor_pengiriman" id="nomor_pengiriman"
+                                        placeholder="Masukkan nomor pengiriman" required
+                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                 </div>
-                            </form>
-                        </div>
+                                <button type="submit"
+                                    class="mt-1 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 text-sm w-fit h-fit">
+                                    Kirim Dokumen Legalisir
+                                </button>
+                            </div>
+                        </form>
                     @else
                         <div>
-                            <p class="font-semibold">Bukti pembayaran telah dikirim</p>
-                            <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}"
-                                class="text-cyan-600 hover:underline text-sm" target="_blank">Lihat Bukti Pembayaran</a>
+                            <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
+                            <p class="text-cyan-600 text-sm">Nomor: {{ $transaction->nomor_pengiriman }}</p>
                         </div>
-                        @if ($transaction->status == 'pengiriman')
-                            <div class="">
-                                <p class="text-gray-500 text-sm my-2">Dokumen telah dikirim. Apabila dokumen telah diterima
-                                    maka silahkan
-                                    konfirmasi pengiriman
-                                </p>
-
-                                <form action="{{ route('mahasiswa.transaksi.konfirmasi_pengiriman', $transaction->id) }}"
-                                    method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm w-full mt-2">Dokumen
-                                        Legalisir diterima</button>
-                                </form>
-                            </div>
-                        @endif
                     @endif
                 </div>
-
             </div>
-
         </div>
-
-
-
     </div>
 @endsection

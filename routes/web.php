@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminTransactionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\TransactionController;
@@ -20,8 +21,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 // Admin Routes
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Route::get('/dashboard', [AuthController::class, 'adminDashboard'])->name('dashboard');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('admin/dashboard', function () {
+        return view('admin.index');
+    })->name('admin.index');
+
+
+    // Pengajuan Routes
+    Route::prefix('admin/dashboard/transaksi')->name('admin.transaksi.')->group(function () {
+        Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
+        Route::get('/{id}', [AdminTransactionController::class, 'detail'])->name('detail');
+        Route::post('/{id}/approve', [AdminTransactionController::class, 'approve'])->name('approve');
+    });
 });
 
 
@@ -45,5 +56,6 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
         Route::post('/store', [TransactionController::class, 'store'])->name('store');
         Route::get('/{id}', [TransactionController::class, 'detail'])->name('detail');
         Route::post('/{id}/upload-bukti-pembayaran', [TransactionController::class, 'uploadPaymentProof'])->name('bukti_pembayaran');
+        Route::post('/{id}/accept', [TransactionController::class, 'accept'])->name('konfirmasi_pengiriman');
     });
 });

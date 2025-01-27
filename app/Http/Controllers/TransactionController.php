@@ -9,17 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
-    // ketika create transaction
-    //   $table->foreignId('file_ijazah')->nullable()->constrained('documents')->cascadeOnDelete();
-    // $table->foreignId('file_transkrip_1')->nullable()->constrained('documents')->cascadeOnDelete();
-    // $table->foreignId('file_transkrip_2')->nullable()->constrained('documents')->cascadeOnDelete();
-    // 3 data diatas diambil dari tabel document yang memiliki user_id yang sama dengan user_id yang sedang login
-    // type nya sesuai nama atribut dan is_active nya true
-
     public function index()
     {
         $user = Auth::user();
-
         $transactions = $user->transactions()->get();
         return view('mahasiswa.transaksi.index', compact('transactions'));
     }
@@ -66,6 +58,7 @@ class TransactionController extends Controller
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
             'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
             'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
+            'biaya_ongkir' => $biaya_ongkir,
             'jumlah_pembayaran' => $jumlah_pembayaran,
         ]);
 
@@ -80,8 +73,6 @@ class TransactionController extends Controller
         $transaction->file_transkrip_2 = Document::find($transaction->file_transkrip_2);
         return view('mahasiswa.transaksi.detail', compact('transaction'));
     }
-
-    // TransactionController.php
 
     public function uploadPaymentProof(Request $request, $transactionId)
     {
@@ -101,5 +92,22 @@ class TransactionController extends Controller
 
         return redirect()->route('mahasiswa.transaksi.detail', $transactionId)
             ->with('success', 'Bukti pembayaran berhasil diunggah.');
+    }
+
+
+
+    public function accept($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        if ($transaction->status !== 'pengiriman') {
+            return redirect()->route('admin.transaksi.index')->with('error', 'Transaksi tidak dapat diterima.');
+        }
+
+        $transaction->update([
+            'status' => 'selesai',
+        ]);
+
+        return redirect()->route('admin.transaksi.index')->with('success', 'Dokumen legalisir berhasil diterima.');
     }
 }

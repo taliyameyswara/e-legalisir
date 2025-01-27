@@ -1,6 +1,6 @@
-@extends('layouts.dashboard')
+@extends('layouts.admin')
 
-@section('title', 'Dashboard - E-Legalisir')
+@section('title', 'Dashboard Admin - E-Legalisir')
 
 @section('content')
     <div class="">
@@ -32,7 +32,8 @@
                         <p class="text-gray-500 text-sm">Lihat data pengajuan legalisir ijazah yang telah diajukan.</p>
                     </div>
                 </div>
-                <a href={{ route('') }} class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
+                <a href={{ route('admin.transaksi.index') }}
+                    class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
                     Lihat Selengkapnya
                 </a>
             </div>
