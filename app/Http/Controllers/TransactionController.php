@@ -107,13 +107,13 @@ class TransactionController extends Controller
         $transaction = Transaction::findOrFail($id);
 
         if ($transaction->status !== 'pengiriman') {
-            return redirect()->route('admin.transaksi.index')->with('error', 'Transaksi tidak dapat diterima.');
+            return redirect()->route('mahasiswa.transaksi.index')->with('error', 'Transaksi tidak dapat diterima.');
         }
 
         $transaction->update([
             'status' => 'selesai',
         ]);
 
-        return redirect()->route('admin.transaksi.index')->with('success', 'Dokumen legalisir berhasil diterima.');
+        return redirect()->route('mahasiswa.transaksi.index')->with('success', 'Dokumen legalisir berhasil diterima.');
     }
 }
