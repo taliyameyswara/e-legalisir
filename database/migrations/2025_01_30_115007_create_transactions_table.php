@@ -28,8 +28,8 @@ return new class extends Migration
 
             $table->string('nama_penerima');
             $table->string('no_hp');
-            $table->string('province_id');
-            $table->string('city_id');
+            $table->foreignId('province_id')->constrained('provinces');
+            $table->foreignId('city_id')->constrained('cities');
             $table->string('alamat_pengiriman');
             $table->string('kode_pos');
             $table->string('kurir');

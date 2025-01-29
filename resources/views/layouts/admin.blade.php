@@ -16,12 +16,12 @@
     <div id="sidebar"
         class="fixed top-0 left-0 h-[96%] bg-white w-60 rounded-3xl transition-all duration-300 z-50 m-4 border">
         <div class="px-5 py-6">
-            <h2 class="text-lg font-bold text-cyan-700 mb-4">Admin E-Legalisir</h2>
+            <h2 class="mb-4 text-lg font-bold text-cyan-700">Admin E-Legalisir</h2>
             <ul>
                 {{-- Dashboard --}}
                 <li
                     class="{{ Request::routeIs('admin.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
-                    <a href="{{ route('admin.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    <a href="{{ route('admin.index') }}" class="flex items-center px-3 py-2 space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -34,7 +34,7 @@
                 {{-- Data Pengajuan Legalisir --}}
                 <li
                     class="{{ Request::routeIs('admin.transaksi.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
-                    <a href="{{ route('admin.transaksi.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    <a href="{{ route('admin.transaksi.index') }}" class="flex items-center px-3 py-2 space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -44,6 +44,19 @@
                     </a>
                 </li>
 
+                {{-- Data Mahasiswa --}}
+                <li
+                    class="{{ Request::routeIs('admin.student.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
+                    <a href="{{ route('admin.student.index') }}" class="flex items-center px-3 py-2 space-x-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        class="size-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                    </svg>
+
+                    <span>Data Mahasiswa</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- Logout -->
@@ -51,7 +64,7 @@
                 <form action="{{ route('logout') }}" method="POST" class="mt-4">
                     @csrf
                     <button
-                        class="flex items-center space-x-2 py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg text-sm w-full">
+                        class="flex items-center w-full px-3 py-2 space-x-2 text-sm text-red-500 rounded-lg hover:bg-red-50">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-4">
                             <path stroke-linecap="round" stroke-linejoin="round"

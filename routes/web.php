@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminTransactionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\RajaOngkirController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/{id}', [AdminTransactionController::class, 'detail'])->name('detail');
         Route::post('/{id}/approve', [AdminTransactionController::class, 'approve'])->name('approve');
     });
+
+    Route::get('admin/dashboard/mahasiswa', [App\Http\Controllers\AdminStudentController::class, 'index'])->name('admin.student.index');
+    Route::get('admin/dashboard/mahasiswa/create', [App\Http\Controllers\AdminStudentController::class, 'create'])->name('admin.student.create');
+    Route::post('admin/dashboard/mahasiswa/store', [App\Http\Controllers\AdminStudentController::class, 'store'])->name('admin.student.store');
+    Route::get('admin/dashboard/mahasiswa/{id}/edit', [App\Http\Controllers\AdminStudentController::class, 'edit'])->name('admin.student.edit');
+    Route::post('admin/dashboard/mahasiswa/{id}/update', [App\Http\Controllers\AdminStudentController::class, 'update'])->name('admin.student.update');
+    Route::delete('admin/dashboard/mahasiswa/{id}/delete', [App\Http\Controllers\AdminStudentController::class, 'delete'])->name('admin.student.delete');
 });
 
 
@@ -58,4 +66,12 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
         Route::post('/{id}/upload-bukti-pembayaran', [TransactionController::class, 'uploadPaymentProof'])->name('bukti_pembayaran');
         Route::post('/{id}/accept', [TransactionController::class, 'accept'])->name('konfirmasi_pengiriman');
     });
+});
+
+
+Route::controller(RajaOngkirController::class)->prefix('api')->group(function () {
+    Route::get('/check-ongkir/{destination_id}', 'checkOngkir');
+    Route::get('/provinces', 'getProvinces');
+    Route::get('/cities/{province_id}', 'getCities');
+    Route::get('/cities', 'getAllCities');
 });

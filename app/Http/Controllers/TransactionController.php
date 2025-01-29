@@ -38,13 +38,19 @@ class TransactionController extends Controller
             'kurir' => 'required|string',
         ]);
 
+        $kurirData = explode('|', $request->kurir);
+        $layanan = $kurirData[0]; // "REGLayanan Reguler"
+        $harga = $kurirData[1]; // "20000"
+
+        // dd($layanan, $harga);
+
         $user = Auth::user();
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
         $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
         $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
 
         $biaya_legalisir = 15000;
-        $biaya_ongkir = 5000;
+        $biaya_ongkir = (int) $harga;
         $jumlah_pembayaran = $biaya_legalisir + $biaya_ongkir;
 
         $transaction = $user->transactions()->create([
@@ -54,7 +60,7 @@ class TransactionController extends Controller
             'city_id' => $request->city_id,
             'alamat_pengiriman' => $request->alamat_pengiriman,
             'kode_pos' => $request->kode_pos,
-            'kurir' => $request->kurir,
+            'kurir' => $layanan,
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
             'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
             'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
