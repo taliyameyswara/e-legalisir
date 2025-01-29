@@ -70,7 +70,7 @@
                             <p class=">{{ $transaction->no_hp }} </p>
                             <p class="text-gray-600">
                                 {{ $transaction->alamat_pengiriman }} ({{ $transaction->kode_pos }}) </p>
-                            <p class="">{{ $transaction->province_id }}, {{ $transaction->city_id }} </p>
+                            <p class="">{{ $transaction->province->name }}, {{ $transaction->city->name }} </p>
                         </div>
                     </div>
                 </div>
