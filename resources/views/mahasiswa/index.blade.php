@@ -78,10 +78,34 @@
                         <p class="text-gray-500 text-sm">Dapatkan informasi dan bantuan terkait tata cara legalisir.</p>
                     </div>
                 </div>
-                <a href="#" class="mt-4 inline-block text-sm font-medium text-cyan-600 hover:underline">
+                <button onclick="toggleModal()" class="mt-4 text-sm font-medium text-cyan-600 hover:underline">
                     Lihat Selengkapnya
-                </a>
+                </button>
             </div>
+
+            <div id="modal"
+                class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center hidden z-50">
+                <div class="bg-white p-6 rounded-lg w-96 shadow-lg relative">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-4">Tata Cara Legalisir</h2>
+                    <p class="text-gray-600 text-sm mb-4">
+                        1. Login ke sistem menggunakan akun Anda.<br>
+                        2. Pilih menu "Ajukan Legalisir" dan isi formulir yang tersedia.<br>
+                        3. Unggah dokumen yang diperlukan.<br>
+                        4. Lakukan pembayaran sesuai instruksi yang diberikan.<br>
+                        5. Tunggu proses verifikasi dari admin.<br>
+                        6. Cek status pengajuan secara berkala di "Riwayat Legalisir".<br>
+                    </p>
+                    <button onclick="toggleModal()"
+                        class="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">Tutup</button>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <script>
+        function toggleModal() {
+            document.getElementById('modal').classList.toggle('hidden');
+        }
+    </script>
 @endsection
