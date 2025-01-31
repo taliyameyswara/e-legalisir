@@ -35,12 +35,13 @@ class TransactionController extends Controller
             'city_id' => 'required|string',
             'alamat_pengiriman' => 'required|string',
             'kode_pos' => 'required|string',
-            'kurir' => 'required|string',
+            // 'kurir' => 'required|string',
+            'jumlah_legalisir' => 'required|integer|min:1|max:10',
         ]);
 
-        $kurirData = explode('|', $request->kurir);
-        $layanan = $kurirData[0]; // "REGLayanan Reguler"
-        $harga = $kurirData[1]; // "20000"
+        // $kurirData = explode('|', $request->kurir);
+        // $layanan = $kurirData[0]; // "REGLayanan Reguler"
+        // $harga = $kurirData[1]; // "20000"
 
         // dd($layanan, $harga);
 
@@ -49,9 +50,9 @@ class TransactionController extends Controller
         $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
         $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
 
-        $biaya_legalisir = 15000;
-        $biaya_ongkir = (int) $harga;
-        $jumlah_pembayaran = $biaya_legalisir + $biaya_ongkir;
+        $biaya_legalisir = 7500 * $request->jumlah_legalisir;
+        // $biaya_ongkir = (int) $harga;
+        $jumlah_pembayaran = $biaya_legalisir;
 
         $transaction = $user->transactions()->create([
             'nama_penerima' => $request->nama_penerima,
@@ -60,12 +61,11 @@ class TransactionController extends Controller
             'city_id' => $request->city_id,
             'alamat_pengiriman' => $request->alamat_pengiriman,
             'kode_pos' => $request->kode_pos,
-            'kurir' => $layanan,
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
             'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
             'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
-            'biaya_ongkir' => $biaya_ongkir,
             'jumlah_pembayaran' => $jumlah_pembayaran,
+            'jumlah_legalisir' => $request->jumlah_legalisir,
         ]);
 
         return redirect()->route('mahasiswa.transaksi.index');

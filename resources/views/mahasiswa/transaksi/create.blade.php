@@ -88,15 +88,12 @@
 
                     <!-- Kurir -->
                     <div>
-                        <label for="kurir" class="block text-sm font-semibold text-gray-700">Kurir</label>
-                        <select name="kurir" id="kurir" class="w-full p-2 mt-1 text-sm border rounded-lg" disabled>
-                            <option value="">Pilih Kurir</option>
-                            {{-- <option value="jne">JNE</option>
-                            <option value="pos">POS Indonesia</option>
-                            <option value="tiki">TIKI</option>
-                            <option value="sicepat">SiCepat</option> --}}
-                        </select>
+                        <label for="jumlah_legalisir" class="block text-sm font-semibold text-gray-700">Jumlah Legalisir</label>
+                        <input type="number" min="1" max="10" name="jumlah_legalisir" id="jumlah_legalisir" placeholder="Masukkan jumlah legalisir"
+                            class="w-full p-2 mt-1 text-sm border rounded-lg">
+                        <small>Harga 1 legalisir adalah Rp.7500 dan maksimal pengajuan 10 legalisir</small>
                     </div>
+
                 </div>
 
                 <!-- Alamat Pengiriman -->
@@ -166,32 +163,6 @@
                 }
             });
 
-
-            $("#city_id").on("change", function () {
-                let cityId = $(this).val();
-                let kurirSelect = $("#kurir");
-
-                kurirSelect.empty().append('<option value="">Pilih Kota/Kabupaten</option>').prop("disabled", true);
-
-                if (cityId) {
-                    $.ajax({
-                        url: `/api/check-ongkir/${cityId}`,
-                        type: "GET",
-                        dataType: "json",
-                        success: function (data) {
-                            data.forEach(function (dt) {
-                                kurirSelect.append(
-                                    `<option value="${dt.service}${dt.description}|${dt.cost[0].value}">${dt.service} - ${dt.description} - ${dt.cost[0].value}</option>`
-                                );
-                            });
-                            kurirSelect.prop("disabled", false);
-                        },
-                        error: function () {
-                            alert("Gagal mengambil data kota");
-                        },
-                    });
-                }
-            });
         });
     </script>
 

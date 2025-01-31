@@ -78,22 +78,23 @@
 
             <!-- Rincian Pembayaran -->
             <div class="">
-                <h2 class="mb-2 font-bold text-gray-700">Rincian Pembayaran</h2>
+                <h2 class="font-bold text-gray-700 ">Rincian Pembayaran</h2>
+                <small class="mb-2 text-xs">(Biaya di bawah ini belum termasuk biaya pengiriman)</small>
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/3">
                         <p class="text-gray-500">Biaya Legalisir</p>
-                        <p class="text-gray-500">Biaya Ongkir</p>
+                        {{-- <p class="text-gray-500">Biaya Ongkir</p> --}}
                         <p class="font-semibold text-cyan-600">Total Pembayaran</p>
                     </div>
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format(15000, 0, ',', '.') }}
+                            Rp{{ number_format(7500, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 7500 }} Dokumen Legalisir
                         </p>
 
-                        <p>
+                        {{-- <p>
                             Rp{{ number_format($transaction->biaya_ongkir , 0, ',', '.') }}
-                        </p>
+                        </p> --}}
 
                         <p class="font-semibold text-cyan-600">
                             Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}

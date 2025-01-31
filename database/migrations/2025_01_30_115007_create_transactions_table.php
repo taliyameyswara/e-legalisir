@@ -32,11 +32,11 @@ return new class extends Migration
             $table->foreignId('city_id')->constrained('cities');
             $table->string('alamat_pengiriman');
             $table->string('kode_pos');
-            $table->string('kurir');
+            // $table->string('kurir');
             $table->string('nomor_pengiriman')->nullable();
-
+            $table->integer('jumlah_legalisir')->default(1);
             $table->enum('status', ['menunggu pembayaran', 'proses legalisir', 'pengiriman', 'selesai'])->default('menunggu pembayaran');
-            $table->decimal('biaya_ongkir', 10, 2)->nullable();
+            // $table->decimal('biaya_ongkir', 10, 2)->nullable();
             $table->decimal('jumlah_pembayaran', 10, 2)->nullable();
             $table->string('bukti_pembayaran')->nullable();
 
