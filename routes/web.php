@@ -71,6 +71,7 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
         Route::get('/', [TransactionController::class, 'index'])->name('index');
         Route::get('/create', [TransactionController::class, 'create'])->name('create');
         Route::post('/store', [TransactionController::class, 'store'])->name('store');
+        Route::post('/storeAmbilKampus', [TransactionController::class, 'storeAmbilKampus'])->name('storeAmbilKampus');
         Route::get('/{id}', [TransactionController::class, 'detail'])->name('detail');
         Route::post('/{id}/upload-bukti-pembayaran', [TransactionController::class, 'uploadPaymentProof'])->name('bukti_pembayaran');
         Route::post('/{id}/accept', [TransactionController::class, 'accept'])->name('konfirmasi_pengiriman');

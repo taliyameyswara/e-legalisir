@@ -28,7 +28,7 @@
                     <div class="flex justify-between">
                         <h1 class="text-xl font-bold text-cyan-700">Data Alumni</h1>
                         <a href={{ route('biodata.index') }}
-                            class="flex gap-1 text-sm items-center text-cyan-700 hover:underline">
+                            class="flex items-center gap-1 text-sm text-cyan-700 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -128,9 +128,26 @@
                     </p>
                 </div>
                 @if (isset($file_ijazah))
-                    <a href="{{ route('mahasiswa.transaksi.create') }}"
+                    {{-- <a href="{{ route('mahasiswa.transaksi.create') }}"
                         class="px-6 py-2 text-white transition-all duration-300 bg-cyan-600 h-fit rounded-xl hover:bg-cyan-700 hover:shadow">Ajukan
-                        Legalisir</a>
+                        Legalisir</a> --}}
+                        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+                        <div x-data="{ open: false }" class="relative">
+                            <button @click="open = !open"
+                                class="px-6 py-2 text-white transition-all duration-300 bg-cyan-600 h-fit rounded-xl hover:bg-cyan-700 hover:shadow">
+                                Ajukan Legalisir
+                            </button>
+
+                            <div x-show="open" @click.away="open = false"
+                                class="absolute right-0 w-64 mt-2 overflow-hidden bg-white border border-gray-200 shadow-md rounded-xl">
+                                <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'cod']) }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pengiriman ke rumah (Pembayaran ongkos COD)</a>
+                                    <hr class="">
+                                <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'ambil-kampus']) }}"
+                                    class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Pengambilan di kampus</a>
+                            </div>
+                        </div>
                 @endif
             </div>
             <hr class="my-3">

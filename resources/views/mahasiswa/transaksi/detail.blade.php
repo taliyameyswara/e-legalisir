@@ -1,3 +1,25 @@
+@php
+
+    $file_ijazah = $transaction->file_ijazah;
+    $is_akta = $transaction->akta_mengajar;
+    $biaya_legalisir = 0;
+    $biaya_akta = 0;
+
+    $program_studi = Auth::user()->student->program_studi ?? '';
+    if (str_contains($program_studi, 'Sarjana')) {
+                $biaya_legalisir = 5000;
+            } elseif (str_contains($program_studi, 'Magister') || str_contains($program_studi, 'Doktor')) {
+                $biaya_legalisir = 10000;
+            } else {
+                $biaya_legalisir = 5000; // Default jika tidak sesuai
+            }
+
+
+    if($is_akta){
+        $biaya_akta = 10000;
+    }
+@endphp
+
 @extends('layouts.dashboard')
 
 @section('content')
@@ -67,25 +89,36 @@
         <div class="grid grid-cols-1 gap-10 lg:grid-cols-2">
             <!-- Informasi Penerima -->
             <div class="">
-                <h2 class="mb-2 font-bold text-gray-700">Informasi Pengiriman</h2>
+                <h2 class="mb-2 font-bold text-gray-700">Informasi Pengajuan</h2>
                 <div class="flex ga-3">
-                    <div class="flex flex-col w-1/2">
-                        <p class="text-gray-500">No Pengiriman</p>
+                    <div class="flex flex-col w-1/3">
                         <p class="text-gray-500">Nama Penerima</p>
+                        <p class="text-gray-500">Nomor Telepon</p>
+                        <p class="text-gray-500">Tipe Pengambilan</p>
+                        @if ($transaction->tipe_pengiriman == 'cod')
+                        <p class="text-gray-500">No Pengiriman</p>
                         <p class="text-gray-500">Kurir</p>
                         <p class="text-gray-500">Alamat</p>
+                        @endif
                     </div>
 
                     <div class="flex flex-col ">
-                        <p class="">{{ $transaction->nomor_pengiriman ?? 'Belum Tersedia' }}</p>
-                        <p class="">{{ $transaction->kurir }}</p>
-                        <div class="">
-                            <p class="font-semibold">{{ $transaction->nama_penerima }} </p>
-                            <p class=">{{ $transaction->no_hp }} </p>
+                        <p class="">{{ $transaction->nama_penerima }} </p>
+                        <p >{{ $transaction->no_hp }} </p>
+                        <p >{{ $transaction->tipe_pengiriman == 'cod' ? 'Pengiriman COD' : 'Ambil di kampus' }} </p>
+
+
+                            @if ($transaction->tipe_pengiriman == 'cod')
+                            <p class="">{{ $transaction->nomor_pengiriman ?? 'Belum Tersedia' }}</p>
+                            <p class="">{{ $transaction->kurir ?? 'Belum Tersedia' }}</p>
                             <p class="text-gray-600">
-                                {{ $transaction->alamat_pengiriman }} ({{ $transaction->kode_pos }}) </p>
-                            <p class="">{{ $transaction->province->name }}, {{ $transaction->city->name }} </p>
-                        </div>
+                                {{ $transaction->alamat_pengiriman }}{{ $transaction->city->name }} ,{{ $transaction->province->name }}  ({{ $transaction->kode_pos }})  </p>
+
+
+                            @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
+
+                            @endif
+
                     </div>
                 </div>
             </div>
@@ -93,7 +126,12 @@
             <!-- Rincian Pembayaran -->
             <div class="">
                 <h2 class="font-bold text-gray-700 ">Rincian Pembayaran</h2>
-                <small class="mb-2 text-xs">(Biaya di bawah ini belum termasuk biaya pengiriman)</small>
+                @if ($transaction->tipe_pengiriman == 'cod')
+                <small class="mb-2 text-xs">(Biaya di bawah ini belum termasuk biaya pengiriman yang akan dibayarkan cod ketika kurir mengirimkan paket ke rumah masing-masing.)</small>
+                @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
+                <small class="mb-2 text-xs">(Dokumen dapat diambil ke kampus apabila sudah selesai dilakukan legalisir.)</small>
+                @endif
+
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/3">
                         <p class="text-gray-500">Biaya Legalisir</p>
@@ -102,8 +140,12 @@
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format($transaction->jumlah_pembayaran / $transaction->jumlah_legalisir, 0, ',', '.') }}
-                            * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir
+                            {{-- Rp{{ number_format($transaction->jumlah_pembayaran / $transaction->jumlah_legalisir, 0, ',', '.') }}
+                            * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir --}}
+                           (Rp{{ number_format($biaya_legalisir, 0, ',', '.') }}<span class="text-xs"> (Dokumen Legalisir)</span>
+                           @if ($is_akta)
+                           +  Rp{{ number_format($biaya_akta, 0, ',', '.') }}<span class="text-xs"> (Akta Mengajar)</span>)
+                           @endif
                         </p>
 
                         <p class="font-semibold text-cyan-600">

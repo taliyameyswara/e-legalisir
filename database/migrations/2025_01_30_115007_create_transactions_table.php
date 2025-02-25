@@ -28,8 +28,8 @@ return new class extends Migration
 
             $table->string('nama_penerima');
             $table->string('no_hp');
-            $table->foreignId('province_id')->constrained('provinces');
-            $table->foreignId('city_id')->constrained('cities');
+            $table->foreignId('province_id')->nullable()->constrained('provinces');
+            $table->foreignId('city_id')->nullable()->constrained('cities');
             $table->string('alamat_pengiriman')->nullable();
             $table->string('kode_pos')->nullable();
             // $table->string('kurir');
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->decimal('jumlah_pembayaran', 10, 2)->nullable();
             $table->string('bukti_pembayaran')->nullable();
 
-
+            $table->enum('tipe_pengiriman', ['cod', 'ambil-kampus'])->default('cod');
             $table->timestamps();
         });
     }
