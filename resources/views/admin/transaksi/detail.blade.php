@@ -7,15 +7,14 @@
 
     $program_studi = $transaction->user->student->program_studi ?? '';
     if (str_contains($program_studi, 'Sarjana')) {
-                $biaya_legalisir = 5000;
-            } elseif (str_contains($program_studi, 'Magister') || str_contains($program_studi, 'Doktor')) {
-                $biaya_legalisir = 10000;
-            } else {
-                $biaya_legalisir = 5000; // Default jika tidak sesuai
-            }
+        $biaya_legalisir = 5000;
+    } elseif (str_contains($program_studi, 'Magister') || str_contains($program_studi, 'Doktor')) {
+        $biaya_legalisir = 10000;
+    } else {
+        $biaya_legalisir = 5000; // Default jika tidak sesuai
+    }
 
-
-    if($is_akta){
+    if ($is_akta) {
         $biaya_akta = 10000;
     }
 @endphp
@@ -90,34 +89,32 @@
             <!-- Informasi Penerima -->
             <div class="">
                 <h2 class="mb-2 font-bold text-gray-700">Informasi Pengajuan</h2>
-                <div class="flex ga-3">
-                    <div class="flex flex-col w-1/3">
+                <div class="flex gap-3">
+                    <div class="flex flex-col w-full">
                         <p class="text-gray-500">Nama Penerima</p>
                         <p class="text-gray-500">Nomor Telepon</p>
                         <p class="text-gray-500">Tipe Pengambilan</p>
                         @if ($transaction->tipe_pengiriman == 'cod')
-                        <p class="text-gray-500">No Pengiriman</p>
-                        <p class="text-gray-500">Kurir</p>
-                        <p class="text-gray-500">Alamat</p>
+                            <p class="text-gray-500">No Pengiriman</p>
+                            {{-- <p class="text-gray-500">Kurir</p> --}}
+                            <p class="text-gray-500">Alamat</p>
                         @endif
                     </div>
 
                     <div class="flex flex-col ">
                         <p class="">{{ $transaction->nama_penerima }} </p>
-                        <p >{{ $transaction->no_hp }} </p>
-                        <p >{{ $transaction->tipe_pengiriman == 'cod' ? 'Pengiriman COD' : 'Ambil di kampus' }} </p>
+                        <p>{{ $transaction->no_hp }} </p>
+                        <p>{{ $transaction->tipe_pengiriman == 'cod' ? 'Pengiriman COD' : 'Ambil di kampus' }} </p>
 
 
-                            @if ($transaction->tipe_pengiriman == 'cod')
+                        @if ($transaction->tipe_pengiriman == 'cod')
                             <p class="">{{ $transaction->nomor_pengiriman ?? 'Belum Tersedia' }}</p>
-                            <p class="">{{ $transaction->kurir ?? 'Belum Tersedia' }}</p>
+                            {{-- <p class="">{{ $transaction->kurir ?? 'Belum Tersedia' }}</p> --}}
                             <p class="text-gray-600">
-                                {{ $transaction->alamat_pengiriman }}{{ $transaction->city->name }} ,{{ $transaction->province->name }}  ({{ $transaction->kode_pos }})  </p>
-
-
-                            @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
-
-                            @endif
+                                {{ $transaction->alamat_pengiriman }}, {{ $transaction->city->name }}
+                                , {{ $transaction->province->name }} ({{ $transaction->kode_pos }}) </p>
+                        @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
+                        @endif
 
                     </div>
                 </div>
@@ -135,11 +132,13 @@
                         <p>
 
 
-                           (Rp{{ number_format($biaya_legalisir, 0, ',', '.') }}<span class="text-xs"> (Dokumen Legalisir)</span>
-                           @if ($is_akta)
-                           +  Rp{{ number_format($biaya_akta, 0, ',', '.') }}<span class="text-xs"> (Akta Mengajar)</span>)
-                           @endif
-                           x {{ $transaction->jumlah_legalisir }}
+                            Rp{{ number_format($biaya_legalisir, 0, ',', '.') }}<span class="text-xs"> (Dokumen
+                                Legalisir)</span>
+                            @if ($is_akta)
+                                + Rp{{ number_format($biaya_akta, 0, ',', '.') }}<span class="text-xs"> (Akta
+                                    Mengajar)</span>)
+                            @endif
+                            x {{ $transaction->jumlah_legalisir }}
                         </p>
 
                         <p class="font-semibold text-cyan-600">
@@ -162,35 +161,35 @@
                     @if ($transaction->status == 'proses legalisir')
                         @if ($transaction->tipe_pengiriman == 'cod')
                             <form action="{{ route('admin.transaksi.approve', $transaction->id) }}" method="POST">
-                            @csrf
-                            <div class="grid items-center grid-cols-2 gap-3">
-                                <div class="mb-4">
-                                    <label for="nomor_pengiriman" class="block text-sm font-medium text-gray-700">Nomor
-                                        Pengiriman</label>
-                                    <input type="text" name="nomor_pengiriman" id="nomor_pengiriman"
-                                        placeholder="Masukkan nomor pengiriman" required
-                                        class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                @csrf
+                                <div class="grid items-center grid-cols-2 gap-3">
+                                    <div class="mb-4">
+                                        <label for="nomor_pengiriman" class="block text-sm font-medium text-gray-700">Nomor
+                                            Pengiriman</label>
+                                        <input type="text" name="nomor_pengiriman" id="nomor_pengiriman"
+                                            placeholder="Masukkan nomor pengiriman" required
+                                            class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                    </div>
+                                    <button type="submit"
+                                        class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
+                                        Kirim Dokumen Legalisir
+                                    </button>
                                 </div>
-                                <button type="submit"
-                                    class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
-                                    Kirim Dokumen Legalisir
-                                </button>
-                            </div>
                             </form>
-                        @elseif ($transaction->tipe_pengiriman == "ambil-kampus")
-                        <form action="{{ route('admin.transaksi.approveAmbilKampus', $transaction->id) }}" method="POST">
-                            @csrf
+                        @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
+                            <form action="{{ route('admin.transaksi.approveAmbilKampus', $transaction->id) }}"
+                                method="POST">
+                                @csrf
 
-                            <div class="">
-                                <p class="font-semibold">Verifikasi Prosees Legalisir</p>
-                                <button type="submit"
-                                    class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
-                                    Legalisir Sudah Selesai
-                                </button>
-                            </div>
+                                <div class="">
+                                    <p class="font-semibold">Verifikasi Prosees Legalisir</p>
+                                    <button type="submit"
+                                        class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
+                                        Legalisir Sudah Selesai
+                                    </button>
+                                </div>
                             </form>
                         @endif
-
                     @elseif ($transaction->status == 'menunggu acc')
                         <form action="{{ route('admin.transaksi.acc', $transaction->id) }}" method="POST">
                             @csrf
@@ -203,16 +202,15 @@
                         <div>Menunggu Pembayaran</div>
                     @elseif($transaction->status == 'pengiriman')
                         @if ($transaction->tipe_pengiriman == 'cod')
-                        <div>
-                            <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
-                            <p class="text-sm text-cyan-600">Nomor: {{ $transaction->nomor_pengiriman }}</p>
-                        </div>
-                        @elseif ($transaction->tipe_pengiriman == "ambil-kampus")
-                        <div>
-                            <p class="font-semibold">Proses Legalisir Sudah Selesai</p>
-                        <div/>
+                            <div>
+                                <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
+                                <p class="text-sm text-cyan-600">Nomor: {{ $transaction->nomor_pengiriman }}</p>
+                            </div>
+                        @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
+                            <div>
+                                <p class="font-semibold">Proses Legalisir Sudah Selesai</p>
+                                <div />
                         @endif
-
                     @else
                         <div class="w-full">
                             <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
