@@ -50,4 +50,19 @@ class AdminTransactionController extends Controller
 
         return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil disetujui dengan nomor pengiriman: ' . $request->nomor_pengiriman);
     }
+
+    public function approveAmbilKampus(Request $request, $id)
+    {
+        $transaction = Transaction::findOrFail($id);
+
+        if ($transaction->status !== 'proses legalisir') {
+            return redirect()->route('admin.transaksi.index')->with('error', 'Transaksi tidak dapat disetujui.');
+        }
+
+        $transaction->update([
+            'status' => 'pengiriman',
+        ]);
+
+        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil disetujui dengan nomor pengiriman: ' . $request->nomor_pengiriman);
+    }
 }

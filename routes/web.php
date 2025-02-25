@@ -37,6 +37,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
         Route::get('/{id}', [AdminTransactionController::class, 'detail'])->name('detail');
         Route::post('/{id}/approve', [AdminTransactionController::class, 'approve'])->name('approve');
+        Route::post('/{id}/approveAmbilKampus', [AdminTransactionController::class, 'approveAmbilKampus'])->name('approveAmbilKampus');
         Route::post('/{id}/acc', [AdminTransactionController::class, 'acc'])->name('acc');
     });
 

@@ -146,6 +146,7 @@
                            @if ($is_akta)
                            +  Rp{{ number_format($biaya_akta, 0, ',', '.') }}<span class="text-xs"> (Akta Mengajar)</span>)
                            @endif
+                           x {{ $transaction->jumlah_legalisir }}
                         </p>
 
                         <p class="font-semibold text-cyan-600">
@@ -183,11 +184,13 @@
                         </div>
                     @elseif ($transaction->status == 'proses legalisir')
                         <div>
-                            <p class="font-semibold">Bukti pembayaran telah dikirim</p>
+                            <p class="font-semibold">Dalam Proses Legalisir</p>
                             <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}"
                                 class="text-sm text-cyan-600 hover:underline" target="_blank">Lihat Bukti Pembayaran</a>
                         </div>
                     @elseif ($transaction->status == 'pengiriman')
+
+                        @if ($transaction->tipe_pengiriman == 'cod')
                         <div class="">
                             <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Apabila dokumen telah diterima
                                 maka silahkan
@@ -202,6 +205,26 @@
                                     Legalisir diterima</button>
                             </form>
                         </div>
+
+                        @elseif ($transaction->tipe_pengiriman == "ambil-kampus")
+                        <div>
+                            <p class="font-semibold">Proses Legalisir Sudah Selesai</p>
+                        <div/>
+
+                        <div class="">
+                            <p class="my-2 text-sm text-gray-500">Silahkan ambil dokumen legalisir ke kampus. Dokumen dapat diambil di kampus setelah proses legalisir selesai.
+                            </p>
+
+                            <form action="{{ route('mahasiswa.transaksi.konfirmasi_pengiriman', $transaction->id) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full px-4 py-2 mt-2 text-sm text-white rounded-lg bg-cyan-600">Dokumen
+                                    Legalisir diambil</button>
+                            </form>
+                        </div>
+
+                        @endif
                     @elseif ($transaction->status == 'menunggu acc')
                         <div class="">
                             <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Silahkan menunggu konfirmasi

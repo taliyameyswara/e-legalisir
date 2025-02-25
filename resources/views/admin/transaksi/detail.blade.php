@@ -160,7 +160,8 @@
                 <div class="w-full p-3 mt-4 border bg-gray-50 rounded-xl">
                     {{-- Form untuk mengisi nomor pengiriman --}}
                     @if ($transaction->status == 'proses legalisir')
-                        <form action="{{ route('admin.transaksi.approve', $transaction->id) }}" method="POST">
+                        @if ($transaction->tipe_pengiriman == 'cod')
+                            <form action="{{ route('admin.transaksi.approve', $transaction->id) }}" method="POST">
                             @csrf
                             <div class="grid items-center grid-cols-2 gap-3">
                                 <div class="mb-4">
@@ -175,7 +176,21 @@
                                     Kirim Dokumen Legalisir
                                 </button>
                             </div>
-                        </form>
+                            </form>
+                        @elseif ($transaction->tipe_pengiriman == "ambil-kampus")
+                        <form action="{{ route('admin.transaksi.approveAmbilKampus', $transaction->id) }}" method="POST">
+                            @csrf
+
+                            <div class="">
+                                <p class="font-semibold">Verifikasi Prosees Legalisir</p>
+                                <button type="submit"
+                                    class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
+                                    Legalisir Sudah Selesai
+                                </button>
+                            </div>
+                            </form>
+                        @endif
+
                     @elseif ($transaction->status == 'menunggu acc')
                         <form action="{{ route('admin.transaksi.acc', $transaction->id) }}" method="POST">
                             @csrf
@@ -185,13 +200,19 @@
                             </button>
                         </form>
                     @elseif ($transaction->status == 'menunggu pembayaran')
-                        {{-- text menunggu pembayaran --}}
                         <div>Menunggu Pembayaran</div>
                     @elseif($transaction->status == 'pengiriman')
+                        @if ($transaction->tipe_pengiriman == 'cod')
                         <div>
                             <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
                             <p class="text-sm text-cyan-600">Nomor: {{ $transaction->nomor_pengiriman }}</p>
                         </div>
+                        @elseif ($transaction->tipe_pengiriman == "ambil-kampus")
+                        <div>
+                            <p class="font-semibold">Proses Legalisir Sudah Selesai</p>
+                        <div/>
+                        @endif
+
                     @else
                         <div class="w-full">
                             <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
