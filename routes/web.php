@@ -23,6 +23,25 @@ Route::post('/admin', [AuthController::class, 'loginAdmin'])->name('login.admin'
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/transaction/pdf/{id}', function ($id) {
+    $transaction = \App\Models\Transaction::with([
+        'ijazah',
+        'transkrip_1',
+        'transkrip_2',
+        'r_akta_mengajar',
+        'user',
+        'province',
+        'city'
+    ])->find($id);
+
+    if (!$transaction) {
+        abort(404, 'Transaction not found');
+    }
+
+    return view('pdf.transaction', compact('transaction'));
+    // return response()->json($transaction);
+})->name('transaction.pdf');
+
 
 
 // Admin Routes
