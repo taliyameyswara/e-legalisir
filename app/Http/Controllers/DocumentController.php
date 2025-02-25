@@ -16,7 +16,8 @@ class DocumentController extends Controller
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
         $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
         $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
-        return view('mahasiswa.legalisir.index', compact('user', 'file_ijazah', 'file_transkrip_1', 'file_transkrip_2'));
+        $akta_mengajar = Document::where('user_id', $user->id)->where('type', 'akta_mengajar')->where('is_active', true)->first();
+        return view('mahasiswa.legalisir.index', compact('user', 'file_ijazah', 'file_transkrip_1', 'file_transkrip_2', 'akta_mengajar'));
     }
 
     public function store(Request $request)
@@ -25,13 +26,16 @@ class DocumentController extends Controller
             'file_ijazah' => 'nullable|mimes:jpg,jpeg,png|max:1024', // Tidak wajib jika hanya ingin mengganti sebagian
             'file_transkrip_1' => 'nullable|mimes:jpg,jpeg,png|max:1024',
             'file_transkrip_2' => 'nullable|mimes:jpg,jpeg,png|max:1024',
+            'akta_mengajar' => 'nullable|mimes:jpg,jpeg,png|max:1024',
         ], [
             'file_ijazah.mimes' => 'File Ijazah harus dalam format jpg, jpeg, atau png.',
             'file_transkrip_1.mimes' => 'File Transkrip Nilai harus dalam format jpg, jpeg, atau png.',
             'file_transkrip_2.mimes' => 'File Transkrip Nilai opsional harus dalam format jpg, jpeg, atau png.',
+            'akta_mengajar.mimes' => 'File Akta Mengajar harus dalam format jpg, jpeg, atau png.',
             'file_ijazah.max' => 'Ukuran File Ijazah tidak boleh lebih dari 1 MB.',
             'file_transkrip_1.max' => 'Ukuran File Transkrip Nilai tidak boleh lebih dari 1 MB.',
             'file_transkrip_2.max' => 'Ukuran File Transkrip Nilai opsional tidak boleh lebih dari 1 MB.',
+            'akta_mengajar.max' => 'Ukuran File Akta Mengajar tidak boleh lebih dari 1 MB.',
         ]);
 
         // Perbarui hanya file yang diunggah
@@ -66,6 +70,17 @@ class DocumentController extends Controller
                 'file' => $request->file('file_transkrip_2')->store('documents', 'public'),
                 'file_name' => $request->file('file_transkrip_2')->getClientOriginalName(),
                 'type' => 'file_transkrip_2',
+                'is_active' => true,
+            ]);
+        }
+
+        if ($request->hasFile('akta_mengajar')) {
+            Document::where('user_id', Auth::id())->where('type', 'akta_mengajar')->update(['is_active' => false]);
+            Document::create([
+                'user_id' => Auth::id(),
+                'file' => $request->file('akta_mengajar')->store('documents', 'public'),
+                'file_name' => $request->file('akta_mengajar')->getClientOriginalName(),
+                'type' => 'akta_mengajar',
                 'is_active' => true,
             ]);
         }

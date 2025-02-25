@@ -1,13 +1,13 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="border border-gray-200 rounded-2xl p-5 bg-white">
+    <div class="p-5 bg-white border border-gray-200 rounded-2xl">
         <a href="{{ route('admin.transaksi.index') }}" class="text-cyan-600 hover:underline">
             ← Kembali </a>
-        <div class="flex justify-between items-center my-3">
+        <div class="flex items-center justify-between my-3">
             <div>
                 <h1 class="text-xl font-semibold text-cyan-700">Detail Transaksi Legalisir Ijazah</h1>
-                <p class="text-gray-600 text-sm">Berikut adalah detail transaksi yang diajukan mahasiswa.</p>
+                <p class="text-sm text-gray-600">Berikut adalah detail transaksi yang diajukan alumni.</p>
             </div>
             <p
                 class="inline-block px-4 py-2 rounded-full text-xs
@@ -21,38 +21,52 @@
         </div>
 
         <div class="flex gap-4 mb-4">
+            @if (isset($transaction->ijazah))
             <div>
-                <label class="block text-gray-700 font-semibold text-sm mb-2">File Ijazah</label>
+                <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
                 <a href="{{ $transaction->ijazah ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
                     target="_blank" id="ijazahLink">
                     <img src="{{ isset($transaction->ijazah) ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
-                        alt="Ijazah Preview" class="rounded-lg min-w-48 h-28 object-cover" id="ijazahPreview">
+                        alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                 </a>
             </div>
+            @endif
+             @if (isset($transaction->transkrip_1))
             <div>
-                <label class="block text-gray-700 font-semibold text-sm mb-2">File Transkrip Nilai 1</label>
+                <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
                 <a href="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
                     target="_blank" id="transkrip1Link">
                     <img src="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
-                        alt="Transkrip 1 Preview" class="rounded-lg min-w-48 h-28 object-cover" id="transkrip1Preview">
+                        alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
                 </a>
             </div>
-            @if (isset($transaction->file_transkrip_2))
+            @endif
+            @if (isset($transaction->transkrip_2))
                 <div>
-                    <label class="block text-gray-700 font-semibold text-sm mb-2">File Transkrip Nilai 2</label>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 2</label>
                     <a href="{{ isset($transaction->transkrip_2) ? asset('storage/' . $transaction->transkrip_2->file) : asset('image/default.png') }}"
                         target="_blank" id="transkrip2Link">
                         <img src="{{ isset($transaction->transkrip_2) ? asset('storage/' . $transaction->transkrip_2->file) : asset('image/default.png') }}"
-                            alt="Transkrip 2 Preview" class="rounded-lg min-w-48 h-28 object-cover" id="transkrip2Preview">
+                            alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip2Preview">
+                    </a>
+                </div>
+            @endif
+            @if (isset($transaction->r_akta_mengajar))
+                <div>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
+                    <a href="{{ isset($transaction->r_akta_mengajar) ? asset('storage/' . $transaction->r_akta_mengajar->file) : asset('image/default.png') }}"
+                        target="_blank" id="transkrip2Link">
+                        <img src="{{ isset($transaction->r_akta_mengajar) ? asset('storage/' . $transaction->r_akta_mengajar->file) : asset('image/default.png') }}"
+                            alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip2Preview">
                     </a>
                 </div>
             @endif
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="grid grid-cols-1 gap-10 lg:grid-cols-2">
             <!-- Informasi Penerima -->
             <div class="">
-                <h2 class="font-bold text-gray-700 mb-2">Informasi Pengiriman</h2>
+                <h2 class="mb-2 font-bold text-gray-700">Informasi Pengiriman</h2>
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/2">
                         <p class="text-gray-500">No Pengiriman</p>
@@ -76,54 +90,75 @@
 
             <!-- Rincian Pembayaran -->
             <div class="">
-                <h2 class="font-bold text-gray-700 mb-2">Rincian Pembayaran</h2>
+                <h2 class="mb-2 font-bold text-gray-700">Rincian Pembayaran</h2>
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/3">
                         <p class="text-gray-500">Biaya Legalisir</p>
-                        <p class="text-gray-500">Biaya Ongkir</p>
-                        <p class="text-cyan-600 font-semibold">Total Pembayaran</p>
+                        <p class="font-semibold text-cyan-600">Total Pembayaran</p>
                     </div>
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format(15000, 0, ',', '.') }}
+                            Rp{{ number_format(5000, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 5000 }} Dokumen Legalisir
                         </p>
 
-                        <p>
-                            Rp{{ number_format(3000, 0, ',', '.') }}
-                        </p>
 
                         <p class="font-semibold text-cyan-600">
                             Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}
                         </p>
                     </div>
                 </div>
+                <div class="my-2">
+                @if ($transaction->bukti_pembayaran)
+                    <div>
+                        <p class="font-semibold">Bukti pembayaran telah dikirim</p>
+                        <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}" class="text-sm text-cyan-600 hover:underline"
+                            target="_blank">Lihat Bukti Pembayaran</a>
+                    </div>
+                @endif
 
-                <div class="border bg-gray-50 p-3 rounded-xl w-full mt-4">
+                </div>
+                <div class="w-full p-3 mt-4 border bg-gray-50 rounded-xl">
                     {{-- Form untuk mengisi nomor pengiriman --}}
                     @if ($transaction->status == 'proses legalisir')
                         <form action="{{ route('admin.transaksi.approve', $transaction->id) }}" method="POST">
                             @csrf
-                            <div class="grid grid-cols-2 gap-3 items-center">
+                            <div class="grid items-center grid-cols-2 gap-3">
                                 <div class="mb-4">
-                                    <label for="nomor_pengiriman" class="block text-gray-700 font-medium text-sm">Nomor
+                                    <label for="nomor_pengiriman" class="block text-sm font-medium text-gray-700">Nomor
                                         Pengiriman</label>
                                     <input type="text" name="nomor_pengiriman" id="nomor_pengiriman"
                                         placeholder="Masukkan nomor pengiriman" required
-                                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
+                                        class="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm">
                                 </div>
                                 <button type="submit"
-                                    class="mt-1 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 text-sm w-fit h-fit">
+                                    class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
                                     Kirim Dokumen Legalisir
                                 </button>
                             </div>
                         </form>
-                    @else
+                        @elseif ($transaction->status == 'menunggu acc')
+                        <form action="{{ route('admin.transaksi.acc', $transaction->id) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
+                            Terima Dokumen
+                            </button>
+                        </form>
+                        @elseif ($transaction->status == 'menunggu pembayaran')
+                        {{-- text menunggu pembayaran --}}
+                        <div>Menunggu Pembayaran</div>
+                        @elseif($transaction->status == 'pengiriman')
                         <div>
                             <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
-                            <p class="text-cyan-600 text-sm">Nomor: {{ $transaction->nomor_pengiriman }}</p>
+                            <p class="text-sm text-cyan-600">Nomor: {{ $transaction->nomor_pengiriman }}</p>
                         </div>
-                    @endif
+                        @else
+                            <div class="w-full">
+                                <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
+                            </div>
+
+                        @endif
                 </div>
             </div>
         </div>

@@ -23,6 +23,11 @@ class Transaction extends Model
         return $this->belongsTo(Document::class, 'file_transkrip_2');
     }
 
+    public function r_akta_mengajar()
+    {
+        return $this->belongsTo(Document::class, 'akta_mengajar');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -5,19 +5,19 @@
     <div class="p-5 bg-white border border-gray-200 rounded-2xl">
         <div class="flex items-center justify-between mb-4">
             <div>
-                <h1 class="text-xl font-semibold text-cyan-700">Data Mahasiswa</h1>
+                <h1 class="text-xl font-semibold text-cyan-700">Data Alumni</h1>
                 <p class="text-sm text-gray-500">
-                    Berikut adalah semua data mahasiswa yang terdaftar
+                    Berikut adalah semua data alumni yang terdaftar
                 </p>
             </div>
-            <a href="{{ route('admin.student.create') }}" class="p-2 text-white bg-cyan-700 rounded-xl">Tambah Mahasiswa</a>
+            <a href="{{ route('admin.student.create') }}" class="p-2 text-white bg-cyan-700 rounded-xl">Tambah Alumni</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-left text-gray-600">
                 <thead class="text-xs font-semibold text-gray-700 uppercase bg-gray-100">
                     <tr>
                         <th class="px-4 py-3">No</th>
-                        <th class="px-4 py-3">Nama Mahasiswa</th>
+                        <th class="px-4 py-3">Nama Alumni</th>
                         <th class="px-4 py-3">NIM</th>
                         <th class="px-4 py-3 text-center">Action</th>
                     </tr>

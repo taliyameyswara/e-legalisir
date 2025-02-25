@@ -35,7 +35,7 @@ return new class extends Migration
             // $table->string('kurir');
             $table->string('nomor_pengiriman')->nullable();
             $table->integer('jumlah_legalisir')->default(1);
-            $table->enum('status', ['menunggu pembayaran', 'proses legalisir', 'pengiriman', 'selesai'])->default('menunggu pembayaran');
+            $table->enum('status', ['menunggu pembayaran', 'menunggu acc', 'proses legalisir', 'pengiriman', 'selesai'])->default('menunggu acc');
             // $table->decimal('biaya_ongkir', 10, 2)->nullable();
             $table->decimal('jumlah_pembayaran', 10, 2)->nullable();
             $table->string('bukti_pembayaran')->nullable();

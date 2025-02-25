@@ -2,22 +2,22 @@
 
 @section('content')
     <div class="">
-        <div class="border border-gray-200 rounded-2xl p-5 bg-white">
-            <div class="flex justify-between items-center mb-4">
+        <div class="p-5 bg-white border border-gray-200 rounded-2xl">
+            <div class="flex items-center justify-between mb-4">
                 <div>
                     <h1 class="text-xl font-semibold text-cyan-700">Riwayat Transaksi Legalisir Ijazah</h1>
-                    <p class="text-gray-500 text-sm">
+                    <p class="text-sm text-gray-500">
                         Berikut adalah progress transaksi legalisir ijazah yang telah diajukan
                     </p>
                 </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm text-left text-gray-600">
-                    <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
+                    <thead class="text-xs font-semibold text-gray-700 uppercase bg-gray-100">
                         <tr>
                             <th class="px-4 py-3">No</th>
                             <th class="px-4 py-3">Tanggal</th>
-                            <th class="px-4 py-3">Nama Mahasiswa</th>
+                            <th class="px-4 py-3">Nama Alumni</th>
                             <th class="px-4 py-3">Status</th>
                             <th class="px-4 py-3 text-center">Action</th>
                         </tr>
@@ -42,7 +42,7 @@
                                 </td>
                                 <td class="px-4 py-3 text-center">
                                     <a href="{{ route('admin.transaksi.detail', $transaction->id) }}"
-                                        class="text-cyan-600 hover:underline hover:text-cyan-700 transition-all duration-200">
+                                        class="transition-all duration-200 text-cyan-600 hover:underline hover:text-cyan-700">
                                         Lihat Detail Transaksi
                                     </a>
                                 </td>
@@ -51,7 +51,7 @@
                         {{-- jika tidak ada data transaksi --}}
                         @if ($transactions->isEmpty())
                             <tr>
-                                <td colspan="4" class="text-center py-4">
+                                <td colspan="4" class="py-4 text-center">
                                     <p class="text-gray-500">Belum ada data riwayat transaksi legalisir</p>
                                 </td>
                             </tr>

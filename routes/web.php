@@ -14,6 +14,9 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showMahasiswaLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'loginMahasiswa'])->name('login.mahasiswa');
 
+Route::get('/register', [AuthController::class, 'showMahasiswaRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'registerMahasiswa'])->name('register.mahasiswa');
+
 Route::get('/admin', [AuthController::class, 'showAdminLogin'])->name('admin-login');
 Route::post('/admin', [AuthController::class, 'loginAdmin'])->name('login.admin');
 
@@ -33,6 +36,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/', [AdminTransactionController::class, 'index'])->name('index');
         Route::get('/{id}', [AdminTransactionController::class, 'detail'])->name('detail');
         Route::post('/{id}/approve', [AdminTransactionController::class, 'approve'])->name('approve');
+        Route::post('/{id}/acc', [AdminTransactionController::class, 'acc'])->name('acc');
     });
 
     Route::get('admin/dashboard/mahasiswa', [App\Http\Controllers\AdminStudentController::class, 'index'])->name('admin.student.index');

@@ -30,6 +30,7 @@
                         alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                 </a>
             </div>
+            @if (isset($transaction->file_transkrip_1))
             <div>
                 <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
                 <a href="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
@@ -38,6 +39,7 @@
                         alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
                 </a>
             </div>
+            @endif
             @if (isset($transaction->file_transkrip_2))
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 2</label>
@@ -48,6 +50,17 @@
                     </a>
                 </div>
             @endif
+            @if (isset($transaction->akta_mengajar))
+                <div>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
+                    <a href="{{ isset($transaction->akta_mengajar) ? asset('storage/' . $transaction->akta_mengajar->file) : asset('image/default.png') }}"
+                        target="_blank" id="transkrip2Link">
+                        <img src="{{ isset($transaction->akta_mengajar) ? asset('storage/' . $transaction->akta_mengajar->file) : asset('image/default.png') }}"
+                            alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip2Preview">
+                    </a>
+                </div>
+            @endif
+
         </div>
 
 
@@ -83,18 +96,14 @@
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/3">
                         <p class="text-gray-500">Biaya Legalisir</p>
-                        {{-- <p class="text-gray-500">Biaya Ongkir</p> --}}
                         <p class="font-semibold text-cyan-600">Total Pembayaran</p>
                     </div>
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format(7500, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 7500 }} Dokumen Legalisir
+                            Rp{{ number_format(5000, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 5000 }} Dokumen Legalisir
                         </p>
 
-                        {{-- <p>
-                            Rp{{ number_format($transaction->biaya_ongkir , 0, ',', '.') }}
-                        </p> --}}
 
                         <p class="font-semibold text-cyan-600">
                             Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}
@@ -129,13 +138,13 @@
                                 </div>
                             </form>
                         </div>
-                    @else
+                    @elseif ($transaction->status == 'proses legalisir')
                         <div>
                             <p class="font-semibold">Bukti pembayaran telah dikirim</p>
                             <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}"
                                 class="text-sm text-cyan-600 hover:underline" target="_blank">Lihat Bukti Pembayaran</a>
                         </div>
-                        @if ($transaction->status == 'pengiriman')
+                    @elseif ($transaction->status == 'pengiriman')
                             <div class="">
                                 <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Apabila dokumen telah diterima
                                     maka silahkan
@@ -150,7 +159,18 @@
                                         Legalisir diterima</button>
                                 </form>
                             </div>
-                        @endif
+
+                    @elseif ($transaction->status == 'menunggu acc')
+                            <div class="">
+                                <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Silahkan menunggu konfirmasi
+                                    dari admin
+                                </p>
+                            </div>
+                    @else
+                        <div class="w-full">
+                            <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
+                        </div>
+
                     @endif
                 </div>
 

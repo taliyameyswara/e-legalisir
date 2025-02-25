@@ -18,6 +18,7 @@
                 @csrf
 
                 <div class="flex gap-4">
+                    @if (isset($file_ijazah))
                     <div>
                         <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
                         <a href="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
@@ -26,6 +27,8 @@
                                 alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                         </a>
                     </div>
+                    @endif
+                    @if (isset($file_transkrip_1))
                     <div>
                         <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
                         <a href="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
@@ -34,12 +37,23 @@
                                 alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                         </a>
                     </div>
+                    @endif
                     @if (isset($file_transkrip_2))
                         <div>
                             <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 2</label>
                             <a href="{{ isset($file_transkrip_2) ? asset('storage/' . $file_transkrip_2->file) : asset('image/default.png') }}"
                                 target="_blank" id="ijazahLink">
                                 <img src="{{ isset($file_transkrip_2) ? asset('storage/' . $file_transkrip_2->file) : asset('image/default.png') }}"
+                                    alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
+                            </a>
+                        </div>
+                    @endif
+                    @if (isset($akta_mengajar))
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
+                            <a href="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                                target="_blank" id="ijazahLink">
+                                <img src="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
                                     alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                             </a>
                         </div>
@@ -91,7 +105,7 @@
                         <label for="jumlah_legalisir" class="block text-sm font-semibold text-gray-700">Jumlah Legalisir</label>
                         <input type="number" min="1" max="10" name="jumlah_legalisir" id="jumlah_legalisir" placeholder="Masukkan jumlah legalisir"
                             class="w-full p-2 mt-1 text-sm border rounded-lg">
-                        <small>Harga 1 legalisir adalah Rp.7500 dan maksimal pengajuan 10 legalisir</small>
+                        <small>Harga 1 legalisir adalah Rp.5000 dan maksimal pengajuan 10 legalisir</small>
                     </div>
 
                 </div>

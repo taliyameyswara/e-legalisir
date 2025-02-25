@@ -20,6 +20,15 @@ class AdminTransactionController extends Controller
 
         return view('admin.transaksi.detail', compact('transaction'));
     }
+    public function acc($id)
+    {
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update([
+            'status' => 'menunggu pembayaran',
+        ]);
+
+        return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi berhasil acc');
+    }
 
     public function approve(Request $request, $id)
     {
