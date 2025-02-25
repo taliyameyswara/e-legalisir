@@ -38,7 +38,13 @@
             @elseif($transaction->status == 'pengiriman') bg-indigo-100 text-indigo-700 border border-indigo-300
             @elseif($transaction->status == 'selesai') bg-green-100 text-green-700 border border-green-300
             @else bg-gray-100 text-gray-700 border border-gray-300 @endif">
-                {{ ucfirst($transaction->status) }}
+            @if ($transaction->status == 'pengiriman' && $transaction->tipe_pengiriman == 'cod')
+            Pengiriman COD
+        @elseif($transaction->status == 'pengiriman' && $transaction->tipe_pengiriman == 'ambil-kampus')
+            Menunggu Pengambilan
+        @else
+        {{ ucfirst($transaction->status) }}
+        @endif
             </p>
         </div>
 
