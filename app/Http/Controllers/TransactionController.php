@@ -19,6 +19,22 @@ class TransactionController extends Controller
     public function create()
     {
         $user = Auth::user();
+        $student = $user->student;
+        if(
+            !$student->tempat_lahir ||
+            !$student->tanggal_lahir ||
+            !$student->program_studi ||
+            !$student->nomor_sk_rektor ||
+            !$student->nomor_ijazah ||
+            !$student->no_hp ||
+            !$student->province_id ||
+            !$student->city_id ||
+            !$student->alamat_pengiriman ||
+            !$student->kode_pos
+        ){
+            return redirect()->back()->with('error', 'Silahkan lengkapi biodata terlebih dahulu.');
+        }
+
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
         $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
         $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();

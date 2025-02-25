@@ -143,7 +143,7 @@
                         <p class="font-semibold text-cyan-600">Total Pembayaran</p>
                     </div>
 
-                    <div class="flex flex-col">
+                    <div class="flex flex-col {{ $transaction->tipe_pengiriman=='cod' ? 'w-full' : 'w-1/2' }}">
                         <p>
                             {{-- Rp{{ number_format($transaction->jumlah_pembayaran / $transaction->jumlah_legalisir, 0, ',', '.') }}
                             * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir --}}

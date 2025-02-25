@@ -96,7 +96,7 @@
             <div class="">
                 <h2 class="mb-2 font-bold text-gray-700">Informasi Pengajuan</h2>
                 <div class="flex gap-3">
-                    <div class="flex flex-col w-full">
+                    <div class="flex flex-col {{ $transaction->tipe_pengiriman=='cod' ? 'w-full' : 'w-1/2' }}">
                         <p class="text-gray-500">Nama Penerima</p>
                         <p class="text-gray-500">Nomor Telepon</p>
                         <p class="text-gray-500">Tipe Pengambilan</p>
