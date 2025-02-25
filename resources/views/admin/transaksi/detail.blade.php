@@ -22,24 +22,24 @@
 
         <div class="flex gap-4 mb-4">
             @if (isset($transaction->ijazah))
-            <div>
-                <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
-                <a href="{{ $transaction->ijazah ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
-                    target="_blank" id="ijazahLink">
-                    <img src="{{ isset($transaction->ijazah) ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
-                        alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
-                </a>
-            </div>
+                <div>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
+                    <a href="{{ $transaction->ijazah ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
+                        target="_blank" id="ijazahLink">
+                        <img src="{{ isset($transaction->ijazah) ? asset('storage/' . $transaction->ijazah->file) : asset('image/default.png') }}"
+                            alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
+                    </a>
+                </div>
             @endif
-             @if (isset($transaction->transkrip_1))
-            <div>
-                <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
-                <a href="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
-                    target="_blank" id="transkrip1Link">
-                    <img src="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
-                        alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
-                </a>
-            </div>
+            @if (isset($transaction->transkrip_1))
+                <div>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
+                    <a href="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
+                        target="_blank" id="transkrip1Link">
+                        <img src="{{ isset($transaction->transkrip_1) ? asset('storage/' . $transaction->transkrip_1->file) : asset('image/default.png') }}"
+                            alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
+                    </a>
+                </div>
             @endif
             @if (isset($transaction->transkrip_2))
                 <div>
@@ -70,7 +70,7 @@
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/2">
                         <p class="text-gray-500">No Pengiriman</p>
-                        <p class="text-gray-500">Kurir</p>
+                        <p class="text-gray-500">Nama Penerima</p>
                         <p class="text-gray-500">Alamat</p>
                     </div>
 
@@ -99,9 +99,9 @@
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format(5000, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 5000 }} Dokumen Legalisir
+                            Rp{{ number_format($transaction->jumlah_pembayaran / $transaction->jumlah_legalisir, 0, ',', '.') }}
+                            * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir
                         </p>
-
 
                         <p class="font-semibold text-cyan-600">
                             Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}
@@ -109,13 +109,13 @@
                     </div>
                 </div>
                 <div class="my-2">
-                @if ($transaction->bukti_pembayaran)
-                    <div>
-                        <p class="font-semibold">Bukti pembayaran telah dikirim</p>
-                        <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}" class="text-sm text-cyan-600 hover:underline"
-                            target="_blank">Lihat Bukti Pembayaran</a>
-                    </div>
-                @endif
+                    @if ($transaction->bukti_pembayaran)
+                        <div>
+                            <p class="font-semibold">Bukti pembayaran telah dikirim</p>
+                            <a href="{{ asset('storage/' . $transaction->bukti_pembayaran) }}"
+                                class="text-sm text-cyan-600 hover:underline" target="_blank">Lihat Bukti Pembayaran</a>
+                        </div>
+                    @endif
 
                 </div>
                 <div class="w-full p-3 mt-4 border bg-gray-50 rounded-xl">
@@ -137,28 +137,27 @@
                                 </button>
                             </div>
                         </form>
-                        @elseif ($transaction->status == 'menunggu acc')
+                    @elseif ($transaction->status == 'menunggu acc')
                         <form action="{{ route('admin.transaksi.acc', $transaction->id) }}" method="POST">
                             @csrf
                             <button type="submit"
                                 class="px-4 py-2 mt-1 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700 w-fit h-fit">
-                            Terima Dokumen
+                                Terima Dokumen
                             </button>
                         </form>
-                        @elseif ($transaction->status == 'menunggu pembayaran')
+                    @elseif ($transaction->status == 'menunggu pembayaran')
                         {{-- text menunggu pembayaran --}}
                         <div>Menunggu Pembayaran</div>
-                        @elseif($transaction->status == 'pengiriman')
+                    @elseif($transaction->status == 'pengiriman')
                         <div>
                             <p class="font-semibold">Nomor pengiriman telah ditetapkan</p>
                             <p class="text-sm text-cyan-600">Nomor: {{ $transaction->nomor_pengiriman }}</p>
                         </div>
-                        @else
-                            <div class="w-full">
-                                <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
-                            </div>
-
-                        @endif
+                    @else
+                        <div class="w-full">
+                            <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

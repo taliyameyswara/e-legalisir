@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminTransactionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BiodataController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\RajaOngkirController;
 use App\Http\Controllers\TransactionController;
@@ -54,6 +55,10 @@ Route::middleware(['auth', 'role:mahasiswa'])->group(function () {
     Route::get('mahasiswa/dashboard', function () {
         return view('mahasiswa.index');
     })->name('mahasiswa.index');
+
+    // edit biodata route
+    Route::get('mahasiswa/dashboard/edit-biodata', [BiodataController::class, 'index'])->name('biodata.index');
+    Route::post('mahasiswa/biodata/update', [BiodataController::class, 'update'])->name('biodata.update');
 
     // legalisir route
     Route::prefix('mahasiswa/dashboard/legalisir')->name('mahasiswa.legalisir.')->group(function () {

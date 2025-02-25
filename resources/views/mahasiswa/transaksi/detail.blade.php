@@ -31,14 +31,14 @@
                 </a>
             </div>
             @if (isset($transaction->file_transkrip_1))
-            <div>
-                <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
-                <a href="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
-                    target="_blank" id="transkrip1Link">
-                    <img src="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
-                        alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
-                </a>
-            </div>
+                <div>
+                    <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
+                    <a href="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
+                        target="_blank" id="transkrip1Link">
+                        <img src="{{ isset($transaction->file_transkrip_1) ? asset('storage/' . $transaction->file_transkrip_1->file) : asset('image/default.png') }}"
+                            alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip1Preview">
+                    </a>
+                </div>
             @endif
             @if (isset($transaction->file_transkrip_2))
                 <div>
@@ -71,6 +71,7 @@
                 <div class="flex ga-3">
                     <div class="flex flex-col w-1/2">
                         <p class="text-gray-500">No Pengiriman</p>
+                        <p class="text-gray-500">Nama Penerima</p>
                         <p class="text-gray-500">Kurir</p>
                         <p class="text-gray-500">Alamat</p>
                     </div>
@@ -101,9 +102,9 @@
 
                     <div class="flex flex-col">
                         <p>
-                            Rp{{ number_format(5000, 0, ',', '.') }} * {{ $transaction->jumlah_pembayaran / 5000 }} Dokumen Legalisir
+                            Rp{{ number_format($transaction->jumlah_pembayaran / $transaction->jumlah_legalisir, 0, ',', '.') }}
+                            * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir
                         </p>
-
 
                         <p class="font-semibold text-cyan-600">
                             Rp{{ number_format($transaction->jumlah_pembayaran, 0, ',', '.') }}
@@ -145,32 +146,30 @@
                                 class="text-sm text-cyan-600 hover:underline" target="_blank">Lihat Bukti Pembayaran</a>
                         </div>
                     @elseif ($transaction->status == 'pengiriman')
-                            <div class="">
-                                <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Apabila dokumen telah diterima
-                                    maka silahkan
-                                    konfirmasi pengiriman
-                                </p>
+                        <div class="">
+                            <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Apabila dokumen telah diterima
+                                maka silahkan
+                                konfirmasi pengiriman
+                            </p>
 
-                                <form action="{{ route('mahasiswa.transaksi.konfirmasi_pengiriman', $transaction->id) }}"
-                                    method="POST">
-                                    @csrf
-                                    <button type="submit"
-                                        class="w-full px-4 py-2 mt-2 text-sm text-white rounded-lg bg-cyan-600">Dokumen
-                                        Legalisir diterima</button>
-                                </form>
-                            </div>
-
+                            <form action="{{ route('mahasiswa.transaksi.konfirmasi_pengiriman', $transaction->id) }}"
+                                method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full px-4 py-2 mt-2 text-sm text-white rounded-lg bg-cyan-600">Dokumen
+                                    Legalisir diterima</button>
+                            </form>
+                        </div>
                     @elseif ($transaction->status == 'menunggu acc')
-                            <div class="">
-                                <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Silahkan menunggu konfirmasi
-                                    dari admin
-                                </p>
-                            </div>
+                        <div class="">
+                            <p class="my-2 text-sm text-gray-500">Dokumen telah dikirim. Silahkan menunggu konfirmasi
+                                dari admin
+                            </p>
+                        </div>
                     @else
                         <div class="w-full">
                             <p class="my-2 text-sm text-gray-500">Dokumen telah diterima</p>
                         </div>
-
                     @endif
                 </div>
 

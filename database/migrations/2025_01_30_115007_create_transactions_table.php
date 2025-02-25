@@ -30,8 +30,8 @@ return new class extends Migration
             $table->string('no_hp');
             $table->foreignId('province_id')->constrained('provinces');
             $table->foreignId('city_id')->constrained('cities');
-            $table->string('alamat_pengiriman');
-            $table->string('kode_pos');
+            $table->string('alamat_pengiriman')->nullable();
+            $table->string('kode_pos')->nullable();
             // $table->string('kurir');
             $table->string('nomor_pengiriman')->nullable();
             $table->integer('jumlah_legalisir')->default(1);

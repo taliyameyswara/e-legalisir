@@ -19,24 +19,24 @@
 
                 <div class="flex gap-4">
                     @if (isset($file_ijazah))
-                    <div>
-                        <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
-                        <a href="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
-                            target="_blank" id="ijazahLink">
-                            <img src="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
-                                alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
-                        </a>
-                    </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>
+                            <a href="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
+                                target="_blank" id="ijazahLink">
+                                <img src="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
+                                    alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
+                            </a>
+                        </div>
                     @endif
                     @if (isset($file_transkrip_1))
-                    <div>
-                        <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
-                        <a href="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
-                            target="_blank" id="ijazahLink">
-                            <img src="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
-                                alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
-                        </a>
-                    </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">File Transkrip Nilai 1</label>
+                            <a href="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
+                                target="_blank" id="ijazahLink">
+                                <img src="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
+                                    alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
+                            </a>
+                        </div>
                     @endif
                     @if (isset($file_transkrip_2))
                         <div>
@@ -66,13 +66,14 @@
                     <div>
                         <label for="nama_penerima" class="block text-sm font-semibold text-gray-700">Nama Penerima</label>
                         <input type="text" name="nama_penerima" id="nama_penerima" placeholder="Masukkan nama penerima"
-                            class="w-full p-2 mt-1 text-sm border rounded-lg">
+                            value={{ Auth::user()->name }} class="w-full p-2 mt-1 text-sm border rounded-lg">
                     </div>
 
                     <!-- No HP -->
                     <div>
                         <label for="no_hp" class="block text-sm font-semibold text-gray-700">No HP</label>
                         <input type="text" name="no_hp" id="no_hp" placeholder="Masukkan nomor HP penerima"
+                            value={{ Auth::user()->student->no_hp ?? '' }}
                             class="w-full p-2 mt-1 text-sm border rounded-lg">
                     </div>
 
@@ -93,19 +94,43 @@
                     </div>
 
 
+
                     <!-- Kode Pos -->
                     <div>
                         <label for="kode_pos" class="block text-sm font-semibold text-gray-700">Kode Pos</label>
                         <input type="text" name="kode_pos" id="kode_pos" placeholder="Masukkan kode pos"
+                            value={{ Auth::user()->student->kode_pos ?? '' }}
                             class="w-full p-2 mt-1 text-sm border rounded-lg">
                     </div>
 
                     <!-- Kurir -->
                     <div>
-                        <label for="jumlah_legalisir" class="block text-sm font-semibold text-gray-700">Jumlah Legalisir</label>
-                        <input type="number" min="1" max="10" name="jumlah_legalisir" id="jumlah_legalisir" placeholder="Masukkan jumlah legalisir"
-                            class="w-full p-2 mt-1 text-sm border rounded-lg">
-                        <small>Harga 1 legalisir adalah Rp.5000 dan maksimal pengajuan 10 legalisir</small>
+                        <label for="jumlah_legalisir" class="block text-sm font-semibold text-gray-700">
+                            Jumlah Legalisir
+                        </label>
+                        <input type="number" min="1" max="10" name="jumlah_legalisir" id="jumlah_legalisir"
+                            placeholder="Masukkan jumlah legalisir" class="w-full p-2 mt-1 text-sm border rounded-lg">
+
+                        <small class="block mt-1">
+                            <strong>Ketentuan harga legalisir:</strong>
+                        </small>
+
+                        <ul class="list-disc pl-5 text-xs ">
+                            <li>Jika memiliki <strong>Akta Mengajar</strong>, harga legalisir adalah
+                                <strong>Rp10.000</strong> per dokumen.
+                            </li>
+                            <li>Jika <strong>tidak memiliki Akta Mengajar</strong>:
+                                <ul class="list-disc pl-5">
+                                    <li>Untuk jenjang <strong>Sarjana (S1)</strong>, harga legalisir adalah
+                                        <strong>Rp5.000</strong> per dokumen.
+                                    </li>
+                                    <li>Untuk jenjang <strong>Magister (S2) dan Doktor (S3)</strong>, harga legalisir adalah
+                                        <strong>Rp10.000</strong> per dokumen.
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>Maksimal pengajuan legalisir adalah <strong>10 dokumen</strong> dalam satu transaksi.</li>
+                        </ul>
                     </div>
 
                 </div>
@@ -115,7 +140,8 @@
                     <label for="alamat_pengiriman" class="block text-sm font-semibold text-gray-700">Alamat
                         Pengiriman</label>
                     <textarea name="alamat_pengiriman" id="alamat_pengiriman" rows="3"
-                        placeholder="Masukkan alamat lengkap pengiriman" class="w-full p-2 mt-1 text-sm border rounded-lg"></textarea>
+                        placeholder="Masukkan alamat lengkap pengiriman" class="w-full p-2 mt-1 text-sm border rounded-lg">{{ Auth::user()->student->alamat_pengiriman ?? '' }}</textarea>
+
                 </div>
 
                 <!-- Submit Button -->
@@ -129,55 +155,60 @@
         </div>
     </div>
 
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-            // Load provinsi saat halaman dimuat
+        $(document).ready(function() {
+            let selectedProvince = "{{ Auth::user()->student->province_id }}";
+            let selectedCity = "{{ Auth::user()->student->city_id }}";
+
             $.ajax({
                 url: "/api/provinces",
                 type: "GET",
                 dataType: "json",
-                success: function (data) {
+                success: function(data) {
                     let provinceSelect = $("#province_id");
-                    data.forEach(function (province) {
+                    data.forEach(function(province) {
                         provinceSelect.append(
-                            `<option value="${province.id}">${province.name}</option>`
+                            `<option value="${province.id}" ${province.id == selectedProvince ? 'selected' : ''}>${province.name}</option>`
                         );
                     });
+                    if (selectedProvince) {
+                        loadCities(selectedProvince, selectedCity);
+                    }
                 },
-                error: function () {
+                error: function() {
                     alert("Gagal mengambil data provinsi");
                 },
             });
 
-            // Event listener untuk dropdown provinsi
-            $("#province_id").on("change", function () {
+            $("#province_id").on("change", function() {
                 let provinceId = $(this).val();
+                loadCities(provinceId, null);
+            });
+
+            function loadCities(provinceId, selectedCity) {
                 let citySelect = $("#city_id");
-
                 citySelect.empty().append('<option value="">Pilih Kota/Kabupaten</option>').prop("disabled", true);
-
                 if (provinceId) {
                     $.ajax({
                         url: `/api/cities/${provinceId}`,
                         type: "GET",
                         dataType: "json",
-                        success: function (data) {
-                            data.forEach(function (city) {
+                        success: function(data) {
+                            data.forEach(function(city) {
                                 citySelect.append(
-                                    `<option value="${city.id}">${city.name}</option>`
+                                    `<option value="${city.id}" ${city.id == selectedCity ? 'selected' : ''}>${city.name}</option>`
                                 );
                             });
                             citySelect.prop("disabled", false);
                         },
-                        error: function () {
+                        error: function() {
                             alert("Gagal mengambil data kota");
                         },
                     });
                 }
-            });
-
+            }
         });
     </script>
-
 @endsection

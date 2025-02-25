@@ -25,7 +25,18 @@
 
                 {{-- two --}}
                 <div class="row-span-3 p-5 bg-white border border-gray-200 rounded-2xl">
-                    <h1 class="text-xl font-bold text-cyan-700">Data Alumni</h1>
+                    <div class="flex justify-between">
+                        <h1 class="text-xl font-bold text-cyan-700">Data Alumni</h1>
+                        <a href={{ route('biodata.index') }}
+                            class="flex gap-1 text-sm items-center text-cyan-700 hover:underline">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>
+                            <span>Edit Biodata</span>
+                        </a>
+                    </div>
                     <p class="text-gray-500">
                         Berikut adalah data alumni yang terdaftar di sistem
                     </p>
@@ -152,7 +163,8 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai (Lembar Pertama) - Opsional</label>
+                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai (Lembar Pertama) -
+                        Opsional</label>
                     <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
                         <div class="flex items-center gap-3">
                             <img src="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
@@ -214,7 +226,8 @@
                         <div class="flex items-center gap-3">
 
                             <img src="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
-                                alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28" id="aktaMengajarPreview">
+                                alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28"
+                                id="aktaMengajarPreview">
                             <div>
                                 <p class="text-sm text-gray-500 truncate" id="aktaMengajarFileName">
                                     {{ isset($akta_mengajar) ? $akta_mengajar->file_name : 'Tidak ada file yang diunggah' }}
@@ -225,7 +238,8 @@
                                 @endif
                             </div>
                         </div>
-                        <input type="file" name="akta_mengajar" id="akta_mengajar" class="w-full h-full opacity-0 cursor-pointer"
+                        <input type="file" name="akta_mengajar" id="akta_mengajar"
+                            class="w-full h-full opacity-0 cursor-pointer"
                             onchange="updatePreview('akta_mengajar', 'aktaMengajarPreview', 'aktaMengajarFileName')">
                         <button type="button" onclick="document.getElementById('akta_mengajar').click()"
                             class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
