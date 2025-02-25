@@ -112,7 +112,7 @@
                             <p class="">{{ $transaction->nomor_pengiriman ?? 'Belum Tersedia' }}</p>
                             <p class="">{{ $transaction->kurir ?? 'Belum Tersedia' }}</p>
                             <p class="text-gray-600">
-                                {{ $transaction->alamat_pengiriman }} {{ $transaction->city->name }} ,{{ $transaction->province->name }}  ({{ $transaction->kode_pos }})  </p>
+                                {{ $transaction->alamat_pengiriman }}{{ $transaction->city->name }} ,{{ $transaction->province->name }}  ({{ $transaction->kode_pos }})  </p>
 
 
                             @elseif ($transaction->tipe_pengiriman == 'ambil-kampus')
@@ -134,7 +134,7 @@
                     <div class="flex flex-col">
                         <p>
 
-                            * {{ $transaction->jumlah_legalisir }} Dokumen Legalisir --}}
+
                            (Rp{{ number_format($biaya_legalisir, 0, ',', '.') }}<span class="text-xs"> (Dokumen Legalisir)</span>
                            @if ($is_akta)
                            +  Rp{{ number_format($biaya_akta, 0, ',', '.') }}<span class="text-xs"> (Akta Mengajar)</span>)
