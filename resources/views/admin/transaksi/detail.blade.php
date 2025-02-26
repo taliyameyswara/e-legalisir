@@ -48,9 +48,10 @@
             </p>
 
         </div>
-        <a href="{{ route('transaction.pdf', $transaction->id) }}" target="_blank" class="p-2 mb-2 text-white bg-green-500 rounded-xl"> Download PDF</a>
+        <a href="{{ route('transaction.pdf', $transaction->id) }}" target="_blank"
+            class="p-2 text-sm text-white rounded-lg bg-cyan-600 hover:bg-cyan-700"> Download PDF</a>
 
-        <div class="flex gap-4 mb-4">
+        <div class="flex gap-4 mt-4 mb-4">
             @if (isset($transaction->ijazah))
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">File Ijazah</label>

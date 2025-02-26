@@ -26,7 +26,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'nim' => 'required|string',
+            'nim' => 'required|string|unique:users,nim',
             'program_studi' => 'required|string',
             // 'tanggal_lahir' => 'required|date',
             // 'tempat_lahir' => 'required|string',

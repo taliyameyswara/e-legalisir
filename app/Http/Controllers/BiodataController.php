@@ -55,6 +55,6 @@ class BiodataController extends Controller
             ]
         );
 
-        return redirect()->route('biodata.index')->with('success', 'Biodata berhasil diperbarui');
+        return redirect()->route('mahasiswa.legalisir.index')->with('success', 'Biodata berhasil diperbarui');
     }
 }
