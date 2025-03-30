@@ -1,7 +1,7 @@
 @php
 
     $file_ijazah = $transaction->file_ijazah;
-    $is_akta = $transaction->akta_mengajar;
+    $is_akta = $transaction->file_akta;
     $biaya_legalisir = 0;
     $biaya_akta = 0;
 
@@ -77,12 +77,12 @@
                     </a>
                 </div>
             @endif
-            @if (isset($transaction->akta_mengajar))
+            @if (isset($transaction->file_akta))
                 <div>
                     <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
-                    <a href="{{ isset($transaction->akta_mengajar) ? asset('storage/' . $transaction->akta_mengajar->file) : asset('image/default.png') }}"
+                    <a href="{{ isset($transaction->file_akta) ? asset('storage/' . $transaction->file_akta->file) : asset('image/default.png') }}"
                         target="_blank" id="transkrip2Link">
-                        <img src="{{ isset($transaction->akta_mengajar) ? asset('storage/' . $transaction->akta_mengajar->file) : asset('image/default.png') }}"
+                        <img src="{{ isset($transaction->file_akta) ? asset('storage/' . $transaction->file_akta->file) : asset('image/default.png') }}"
                             alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28" id="transkrip2Preview">
                     </a>
                 </div>

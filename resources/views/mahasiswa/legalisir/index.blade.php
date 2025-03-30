@@ -128,9 +128,6 @@
                     </p>
                 </div>
                 @if (isset($file_ijazah))
-                    {{-- <a href="{{ route('mahasiswa.transaksi.create') }}"
-                        class="px-6 py-2 text-white transition-all duration-300 bg-cyan-600 h-fit rounded-xl hover:bg-cyan-700 hover:shadow">Ajukan
-                        Legalisir</a> --}}
                     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
                     <div x-data="{ open: false }" class="relative">
@@ -142,11 +139,11 @@
                         <div x-show="open" @click.away="open = false"
                             class="absolute right-0 w-64 mt-2 overflow-hidden bg-white border border-gray-200 shadow-md rounded-xl">
                             <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'cod']) }}"
-                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100 text-sm">Pengiriman ke rumah
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengiriman ke rumah
                             </a>
                             <hr class="">
                             <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'ambil-kampus']) }}"
-                                class="block px-4 py-2 text-gray-700 hover:bg-gray-100 text-sm">Pengambilan di Fakultas
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengambilan di Fakultas
                                 Kampus</a>
                         </div>
                     </div>
@@ -159,18 +156,21 @@
                     <label class="block mb-2 font-semibold text-gray-700">File Ijazah </label>
                     <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
                         <div class="flex items-center gap-3">
-                            <img src="{{ isset($file_ijazah) ? asset('storage/' . $file_ijazah->file) : asset('image/default.png') }}"
+                            <img src="{{ isset($file_ijazah) ? asset( $file_ijazah->file) : asset('image/default.png') }}"
                                 alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
                             <div>
                                 <p class="text-sm text-gray-500 truncate" id="ijazahFileName">
                                     {{ isset($file_ijazah) ? $file_ijazah->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
                                 @if (isset($file_ijazah))
-                                    <a href="{{ asset('storage/' . $file_ijazah->file) }}" target="_blank"
+                                    <a href="{{ asset( $file_ijazah->file) }}" target="_blank"
                                         class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
                                 @endif
                             </div>
                         </div>
+                        <input type="number" name="input_ijazah" id="input_ijazah"
+                        class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
+                        placeholder="Input Jumlah ijazah">
                         <input type="file" name="file_ijazah" id="file_ijazah"
                             class="w-full h-full opacity-0 cursor-pointer"
                             onchange="updatePreview('file_ijazah', 'ijazahPreview', 'ijazahFileName')">
@@ -182,57 +182,32 @@
                 </div>
 
                 <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai (Lembar Pertama) -
+                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai -
                         Opsional</label>
                     <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
                         <div class="flex items-center gap-3">
-                            <img src="{{ isset($file_transkrip_1) ? asset('storage/' . $file_transkrip_1->file) : asset('image/default.png') }}"
+                            <img src="{{ isset($file_transkrip) ? asset( $file_transkrip->file) : asset('image/default.png') }}"
                                 alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28"
                                 id="transkrip1Preview">
                             <div>
                                 <p class="text-sm text-gray-500 truncate" id="transkrip1FileName">
-                                    {{ isset($file_transkrip_1) ? $file_transkrip_1->file_name : 'Tidak ada file yang diunggah' }}
+                                    {{ isset($file_transkrip) ? $file_transkrip->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
-                                @if (isset($file_transkrip_1))
-                                    <a href="{{ asset('storage/' . $file_transkrip_1->file) }}" target="_blank"
+                                @if (isset($file_transkrip))
+                                    <a href="{{ asset( $file_transkrip->file) }}" target="_blank"
                                         class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
                                 @endif
                             </div>
                         </div>
-                        <input type="file" name="file_transkrip_1" id="file_transkrip_1"
+                        <input type="number" name="input_transkrip" id="input_transkrip"
+                            class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
+                            placeholder="Input Jumlah Transkrip">
+                        <input type="file" name="file_transkrip" id="file_transkrip"
                             class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('file_transkrip_1', 'transkrip1Preview', 'transkrip1FileName')">
-                        <button type="button" onclick="document.getElementById('file_transkrip_1').click()"
+                            onchange="updatePreview('file_transkrip', 'transkrip1Preview', 'transkrip1FileName')">
+                        <button type="button" onclick="document.getElementById('file_transkrip').click()"
                             class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
                             Pilih File Transkrip 1
-                        </button>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai (Lembar Kedua) -
-                        Opsional</label>
-                    <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ isset($file_transkrip_2) ? asset('storage/' . $file_transkrip_2->file) : asset('image/default.png') }}"
-                                alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28"
-                                id="transkrip2Preview">
-                            <div>
-                                <p class="text-sm text-gray-500 truncate" id="transkrip2FileName">
-                                    {{ isset($file_transkrip_2) ? $file_transkrip_2->file_name : 'Tidak ada file yang diunggah' }}
-                                </p>
-                                @if (isset($file_transkrip_2))
-                                    <a href="{{ asset('storage/' . $file_transkrip_2->file) }}" target="_blank"
-                                        class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
-                                @endif
-                            </div>
-                        </div>
-                        <input type="file" name="file_transkrip_2" id="file_transkrip_2"
-                            class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('file_transkrip_2', 'transkrip2Preview', 'transkrip2FileName')">
-                        <button type="button" onclick="document.getElementById('file_transkrip_2').click()"
-                            class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
-                            Pilih File Transkrip 2
                         </button>
                     </div>
                 </div>
@@ -244,23 +219,26 @@
                     <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
                         <div class="flex items-center gap-3">
 
-                            <img src="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                            <img src="{{ isset($file_akta) ? asset( $file_akta->file) : asset('image/default.png') }}"
                                 alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28"
                                 id="aktaMengajarPreview">
                             <div>
                                 <p class="text-sm text-gray-500 truncate" id="aktaMengajarFileName">
-                                    {{ isset($akta_mengajar) ? $akta_mengajar->file_name : 'Tidak ada file yang diunggah' }}
+                                    {{ isset($file_akta) ? $file_akta->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
-                                @if (isset($akta_mengajar))
-                                    <a href="{{ asset('storage/' . $akta_mengajar->file) }}" target="_blank"
+                                @if (isset($file_akta))
+                                    <a href="{{ asset( $file_akta->file) }}" target="_blank"
                                         class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
                                 @endif
                             </div>
                         </div>
-                        <input type="file" name="akta_mengajar" id="akta_mengajar"
+                        <input type="number" name="input_akta" id="input_akta"
+                        class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
+                        placeholder="Input Jumlah akta">
+                        <input type="file" name="file_akta" id="file_akta"
                             class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('akta_mengajar', 'aktaMengajarPreview', 'aktaMengajarFileName')">
-                        <button type="button" onclick="document.getElementById('akta_mengajar').click()"
+                            onchange="updatePreview('file_akta', 'aktaMengajarPreview', 'aktaMengajarFileName')">
+                        <button type="button" onclick="document.getElementById('file_akta').click()"
                             class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
                             Pilih File Akta Mengajar
                         </button>

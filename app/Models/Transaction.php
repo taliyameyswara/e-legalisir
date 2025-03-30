@@ -13,19 +13,15 @@ class Transaction extends Model
         return $this->belongsTo(Document::class, 'file_ijazah');
     }
 
-    public function transkrip_1()
+    public function transkrip()
     {
-        return $this->belongsTo(Document::class, 'file_transkrip_1');
+        return $this->belongsTo(Document::class, 'file_transkrip');
     }
 
-    public function transkrip_2()
-    {
-        return $this->belongsTo(Document::class, 'file_transkrip_2');
-    }
 
-    public function r_akta_mengajar()
+    public function akta()
     {
-        return $this->belongsTo(Document::class, 'akta_mengajar');
+        return $this->belongsTo(Document::class, 'file_akta');
     }
 
     public function user()

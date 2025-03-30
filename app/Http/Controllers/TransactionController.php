@@ -38,9 +38,9 @@ class TransactionController extends Controller
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
         $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
         $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
-        $akta_mengajar = Document::where('user_id', $user->id)->where('type', 'akta_mengajar')->where('is_active', true)->first();
+        $file_akta = Document::where('user_id', $user->id)->where('type', 'file_akta')->where('is_active', true)->first();
 
-        return view('mahasiswa.transaksi.create', compact('file_ijazah', 'file_transkrip_1', 'file_transkrip_2', 'akta_mengajar'));
+        return view('mahasiswa.transaksi.create', compact('file_ijazah', 'file_transkrip_1', 'file_transkrip_2', 'file_akta'));
     }
 
     public function store(Request $request)
@@ -62,8 +62,8 @@ class TransactionController extends Controller
         $program_studi = $user->student->program_studi ?? '';
 
         // Cek apakah ada akta mengajar
-        $akta_mengajar = Document::where('user_id', $user->id)
-            ->where('type', 'akta_mengajar')
+        $file_akta = Document::where('user_id', $user->id)
+            ->where('type', 'file_akta')
             ->where('is_active', true)
             ->first();
 
@@ -71,7 +71,7 @@ class TransactionController extends Controller
         $biaya_legalisir = 0;
 
         // Jika ada akta mengajar, biaya legalisir menjadi 10.000
-        if ($akta_mengajar) {
+        if ($file_akta) {
             $biaya_akta = 10000;
         }
             // Jika tidak ada akta, biaya tergantung jenjang studi
@@ -106,7 +106,7 @@ class TransactionController extends Controller
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
             'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
             'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
-            'akta_mengajar' => $akta_mengajar ? $akta_mengajar->id : null,
+            'file_akta' => $file_akta ? $file_akta->id : null,
             'jumlah_pembayaran' => $total_biaya_legalisir,
             'jumlah_legalisir' => $request->jumlah_legalisir,
             'tipe_pengiriman' => $request->tipe_pengiriman,
@@ -134,13 +134,13 @@ class TransactionController extends Controller
         $program_studi = $user->student->program_studi ?? '';
 
         // Cek apakah ada akta mengajar
-        $akta_mengajar = Document::where('user_id', $user->id)
-            ->where('type', 'akta_mengajar')
+        $file_akta = Document::where('user_id', $user->id)
+            ->where('type', 'file_akta')
             ->where('is_active', true)
             ->first();
 
         // Jika ada akta mengajar, biaya legalisir menjadi 10.000
-        if ($akta_mengajar) {
+        if ($file_akta) {
             $biaya_legalisir = 10000;
         } else {
             // Jika tidak ada akta, biaya tergantung jenjang studi
@@ -169,7 +169,7 @@ class TransactionController extends Controller
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
             'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
             'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
-            'akta_mengajar' => $akta_mengajar ? $akta_mengajar->id : null,
+            'file_akta' => $file_akta ? $file_akta->id : null,
             'jumlah_pembayaran' => $total_biaya_legalisir,
             'jumlah_legalisir' => $request->jumlah_legalisir,
             'tipe_pengiriman' => $request->tipe_pengiriman,
@@ -186,7 +186,7 @@ class TransactionController extends Controller
         $transaction->file_ijazah = Document::find($transaction->file_ijazah);
         $transaction->file_transkrip_1 = Document::find($transaction->file_transkrip_1);
         $transaction->file_transkrip_2 = Document::find($transaction->file_transkrip_2);
-        $transaction->akta_mengajar = Document::find($transaction->akta_mengajar);
+        $transaction->file_akta = Document::find($transaction->file_akta);
         return view('mahasiswa.transaksi.detail', compact('transaction'));
     }
 

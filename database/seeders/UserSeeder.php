@@ -34,7 +34,6 @@ class UserSeeder extends Seeder
             'tanggal_lahir' => '2000-01-01',
             'tempat_lahir' => 'Jakarta',
             'program_studi' => 'Informatika',
-            'nomor_sk_rektor' => 'SKR-12345',
             'nomor_ijazah' => 'IJZ-98765',
         ]);
     }

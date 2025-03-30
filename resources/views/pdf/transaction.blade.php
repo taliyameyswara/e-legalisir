@@ -118,7 +118,7 @@
                 </tr>
                 <tr>
                     <td>Akta Mengajar</td>
-                    <td>{{ $transaction->r_akta_mengajar ? '✅' : '-' }}</td>
+                    <td>{{ $transaction->akta ? '✅' : '-' }}</td>
                 </tr>
             </tbody>
         </table>

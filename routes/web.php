@@ -28,7 +28,7 @@ Route::get('/transaction/pdf/{id}', function ($id) {
         'ijazah',
         'transkrip_1',
         'transkrip_2',
-        'r_akta_mengajar',
+        'akta',
         'user',
         'province',
         'city'

@@ -17,13 +17,18 @@ return new class extends Migration
             $table->date('tanggal_lahir')->nullable();
             $table->string('tempat_lahir')->nullable();
             $table->string('program_studi');
-            $table->string('nomor_sk_rektor')->nullable();
             $table->string('nomor_ijazah')->nullable();
             $table->string('no_hp')->nullable();
             $table->foreignId('province_id')->nullable()->constrained('provinces');
             $table->foreignId('city_id')->nullable()->constrained('cities');
             $table->string('alamat_pengiriman')->nullable();
             $table->string('kode_pos')->nullable();
+
+            $table->string('nama_perusahaan')->nullable();
+            $table->string('jabatan_perusahaan')->nullable();
+            $table->string('alamat_perusahaan')->nullable();
+            $table->integer('gaji')->nullable();
+            
             $table->timestamps();
         });
     }

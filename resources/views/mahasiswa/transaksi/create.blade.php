@@ -56,12 +56,12 @@
                                 </a>
                             </div>
                         @endif
-                        @if (isset($akta_mengajar))
+                        @if (isset($file_akta))
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
-                                <a href="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                                <a href="{{ isset($file_akta) ? asset('storage/' . $file_akta->file) : asset('image/default.png') }}"
                                     target="_blank" id="ijazahLink">
-                                    <img src="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                                    <img src="{{ isset($file_akta) ? asset('storage/' . $file_akta->file) : asset('image/default.png') }}"
                                         alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28"
                                         id="ijazahPreview">
                                 </a>
@@ -209,12 +209,12 @@
                                 </a>
                             </div>
                         @endif
-                        @if (isset($akta_mengajar))
+                        @if (isset($file_akta))
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">File Akta Mengajar</label>
-                                <a href="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                                <a href="{{ isset($file_akta) ? asset('storage/' . $file_akta->file) : asset('image/default.png') }}"
                                     target="_blank" id="ijazahLink">
-                                    <img src="{{ isset($akta_mengajar) ? asset('storage/' . $akta_mengajar->file) : asset('image/default.png') }}"
+                                    <img src="{{ isset($file_akta) ? asset('storage/' . $file_akta->file) : asset('image/default.png') }}"
                                         alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28"
                                         id="ijazahPreview">
                                 </a>
