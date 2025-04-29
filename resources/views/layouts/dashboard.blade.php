@@ -16,12 +16,12 @@
     <div id="sidebar"
         class="fixed top-0 left-0 h-[96%] bg-white w-60 rounded-3xl transition-all duration-300 z-50 m-4 border">
         <div class="px-5 py-6">
-            <h2 class="text-lg font-bold text-cyan-700 mb-4">E-Legalisir Ijazah</h2>
+            <h2 class="mb-4 text-lg font-bold text-cyan-700">E-Legalisir Ijazah</h2>
             <ul>
                 {{-- Dashboard --}}
                 <li
                     class="{{ Request::routeIs('mahasiswa.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
-                    <a href="{{ route('mahasiswa.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    <a href="{{ route('mahasiswa.index') }}" class="flex items-center px-3 py-2 space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -33,7 +33,7 @@
                 {{-- Legalisir --}}
                 <li
                     class="{{ Request::routeIs('mahasiswa.legalisir.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2  text-sm">
-                    <a href="{{ route('mahasiswa.legalisir.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    <a href="{{ route('mahasiswa.legalisir.index') }}" class="flex items-center px-3 py-2 space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -45,7 +45,7 @@
                 {{-- Riwayat Legalisir --}}
                 <li
                     class="{{ Request::routeIs('mahasiswa.transaksi.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2  text-sm">
-                    <a href="{{ route('mahasiswa.transaksi.index') }}" class="flex items-center space-x-3  py-2 px-3">
+                    <a href="{{ route('mahasiswa.transaksi.index') }}" class="flex items-center px-3 py-2 space-x-3">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-5">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -55,6 +55,17 @@
                     </a>
                 </li>
 
+                <li class="{{ Request::routeIs('mahasiswa.kurir.index') ? 'bg-cyan-500/10 border border-cyan-500/50 text-cyan-600' : 'text-gray-500' }}  rounded-lg mb-2   text-sm">
+                    <a href="{{ route('mahasiswa.kurir.index') }}" class="flex items-center px-3 py-2 space-x-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                        </svg>
+
+                        <span>Pengiriman Legalisir</span>
+                    </a>
+                </li>
+
+
             </ul>
 
             <!-- Logout -->
@@ -62,7 +73,7 @@
                 <form action="{{ route('logout') }}" method="POST" class="mt-4">
                     @csrf
                     <button
-                        class="flex items-center space-x-2 py-2 px-3 text-red-500 hover:bg-red-50 rounded-lg text-sm w-full">
+                        class="flex items-center w-full px-3 py-2 space-x-2 text-sm text-red-500 rounded-lg hover:bg-red-50">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-4">
                             <path stroke-linecap="round" stroke-linejoin="round"

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->foreignId('file_transkrip')->nullable()->constrained('documents')->cascadeOnDelete();
             $table->foreignId('file_akta')->nullable()->constrained('documents')->cascadeOnDelete();
 
-            $table->integer('jumlah_ijazah')->default(1);
-            $table->integer('jumlah_transkrip')->default(1);
-            $table->integer('jumlah_file_akta')->default(1);
+            $table->integer('jumlah_ijazah')->default(0);
+            $table->integer('jumlah_transkrip')->default(0);
+            $table->integer('jumlah_akta')->default(0);
 
             // status transaksi
             // menunggu pembayaran -> belum dibayar
@@ -35,16 +35,16 @@ return new class extends Migration
             $table->string('alamat_pengiriman')->nullable();
             $table->string('kode_pos')->nullable();
 
-            $table->string('kurir');
+            $table->string('pengiriman')->nullable();
             $table->string('nomor_pengiriman')->nullable();
             $table->enum('status', ['menunggu pembayaran', 'menunggu acc', 'proses legalisir', 'pengiriman', 'selesai','ditolak'])->default('menunggu acc');
             $table->decimal('biaya_ongkir', 10, 2)->nullable();
-            $table->decimal('jumlah_pembayaran', 10, 2)->nullable();
+            $table->decimal('biaya_legalisir', 10, 2)->nullable();
+            $table->decimal('total_pembayaran', 10, 2)->nullable();
             $table->string('bukti_pembayaran')->nullable();
 
             $table->string('alasan_tolak')->nullable();
 
-            $table->enum('tipe_pengiriman', ['cod', 'ambil-kampus'])->default('cod');
             $table->timestamps();
         });
     }

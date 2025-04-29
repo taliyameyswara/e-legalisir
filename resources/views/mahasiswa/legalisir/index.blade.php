@@ -6,11 +6,11 @@
             {{-- left --}}
             <div class="grid grid-rows-4 gap-3">
                 {{-- one --}}
-                <div class="flex row-span-1 p-5 bg-white border border-gray-200 rounded-2xl">
-                    <div class="flex items-center gap-3">
+                <div class="flex row-span-1 p-5 bg-white rounded-2xl border border-gray-200">
+                    <div class="flex gap-3 items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor"
-                            class="h-12 p-2 border rounded-lg bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
+                            class="p-2 h-12 text-cyan-600 rounded-lg border bg-cyan-500/10 border-cyan-500/50">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                         </svg>
@@ -24,11 +24,11 @@
                 </div>
 
                 {{-- two --}}
-                <div class="row-span-3 p-5 bg-white border border-gray-200 rounded-2xl">
+                <div class="row-span-3 p-5 bg-white rounded-2xl border border-gray-200">
                     <div class="flex justify-between">
                         <h1 class="text-xl font-bold text-cyan-700">Data Alumni</h1>
                         <a href={{ route('biodata.index') }}
-                            class="flex items-center gap-1 text-sm text-cyan-700 hover:underline">
+                            class="flex gap-1 items-center text-sm text-cyan-700 hover:underline">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-5">
                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -60,10 +60,7 @@
                             <p class="text-sm text-gray-500">Program Studi</p>
                             <p class="font-semibold text-gray-700">{{ Auth::user()->student->program_studi ?? '-' }}</p>
                         </div>
-                        <div>
-                            <p class="text-sm text-gray-500">No SK Rektor</p>
-                            <p class="font-semibold text-gray-700">{{ Auth::user()->student->nomor_sk_rektor ?? '-' }}</p>
-                        </div>
+
                         <div>
                             <p class="text-sm text-gray-500">No Ijazah</p>
                             <p class="font-semibold text-gray-700">{{ Auth::user()->student->nomor_ijazah ?? '-' }}</p>
@@ -74,14 +71,14 @@
 
             {{-- right --}}
 
-            <div class="p-5 bg-white border border-gray-200 rounded-2xl">
+            <div class="p-5 bg-white rounded-2xl border border-gray-200">
                 <h1 class="text-xl font-bold text-cyan-700">Ketentuan Legalisir Ijazah</h1>
                 <p class="text-gray-500">
                     Berikut adalah ketentuan legalisir ijazah yang harus dipenuhi
                 </p>
                 <hr class="my-3">
 
-                <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                <ul class="space-y-3 list-disc list-inside text-gray-700">
                     <li>
                         Biaya legalisir ijazah dengan menggunakan <span class="font-semibold text-gray-800">Virtual
                             Account</span>.
@@ -118,9 +115,11 @@
             </div>
         </div>
 
+       
+
         {{-- four --}}
-        <div class="p-5 mt-3 bg-white border border-gray-200 rounded-2xl">
-            <div class="flex items-center justify-between">
+        <div class="p-5 mt-3 bg-white rounded-2xl border border-gray-200">
+            <div class="flex justify-between items-center">
                 <div class="">
                     <h1 class="text-xl font-bold text-cyan-700">File Ijazah</h1>
                     <p class="text-gray-500">
@@ -128,126 +127,111 @@
                     </p>
                 </div>
                 @if (isset($file_ijazah))
-                    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open"
-                            class="px-6 py-2 text-white transition-all duration-300 bg-cyan-600 h-fit rounded-xl hover:bg-cyan-700 hover:shadow">
-                            Ajukan Legalisir
-                        </button>
-
-                        <div x-show="open" @click.away="open = false"
-                            class="absolute right-0 w-64 mt-2 overflow-hidden bg-white border border-gray-200 shadow-md rounded-xl">
-                            <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'cod']) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengiriman ke rumah
-                            </a>
-                            <hr class="">
-                            <a href="{{ route('mahasiswa.transaksi.create', ['type' => 'ambil-kampus']) }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengambilan di Fakultas
-                                Kampus</a>
-                        </div>
-                    </div>
+                    <a href="{{ route('mahasiswa.transaksi.create') }}"
+                    class="px-6 py-2 text-white bg-cyan-600 rounded-xl transition-all duration-300 h-fit hover:bg-cyan-700 hover:shadow">
+                    Ajukan Legalisir
+                </a>
                 @endif
             </div>
             <hr class="my-3">
             <form action="{{ route('mahasiswa.legalisir.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">File Ijazah </label>
-                    <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ isset($file_ijazah) ? asset( $file_ijazah->file) : asset('image/default.png') }}"
-                                alt="Ijazah Preview" class="object-cover rounded-lg min-w-48 h-28" id="ijazahPreview">
-                            <div>
+                    <label class="block mb-2 font-semibold text-gray-700">File Ijazah</label>
+                    <div class="flex flex-col gap-4 items-center p-4 w-full bg-gray-50 rounded-xl border md:flex-row md:justify-between">
+                        <div class="flex gap-3 items-center">
+                            <img src="{{ asset('image/pdf.png') }}" alt="" class="object-cover w-12 h-12 rounded-lg" id="ijazahPreview">
+                            <div class="flex flex-col">
                                 <p class="text-sm text-gray-500 truncate" id="ijazahFileName">
                                     {{ isset($file_ijazah) ? $file_ijazah->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
                                 @if (isset($file_ijazah))
-                                    <a href="{{ asset( $file_ijazah->file) }}" target="_blank"
-                                        class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
+                                    <a href="{{ asset( $file_ijazah->file) }}" target="_blank" class="text-sm text-cyan-600 hover:underline">Lihat File</a>
                                 @endif
                             </div>
                         </div>
-                        <input type="number" name="input_ijazah" id="input_ijazah"
-                        class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
-                        placeholder="Input Jumlah ijazah">
-                        <input type="file" name="file_ijazah" id="file_ijazah"
-                            class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('file_ijazah', 'ijazahPreview', 'ijazahFileName')">
-                        <button type="button" onclick="document.getElementById('file_ijazah').click()"
-                            class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
-                            Pilih File Ijazah
-                        </button>
+
+                        <div class="flex flex-col gap-3 items-center md:flex-row">
+                            <input type="number" name="input_ijazah" id="input_ijazah" value="{{ $file_ijazah->jumlah ?? 1 }}"
+                                class="p-2 w-full text-gray-700 bg-gray-100 rounded-xl border border-gray-200 md:w-32"
+                                placeholder="Jumlah Ijazah">
+
+                            <div class="relative w-full md:w-auto">
+                                <input type="file" name="file_ijazah" id="file_ijazah" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    onchange="updatePreview('file_ijazah', 'ijazahPreview', 'ijazahFileName')">
+                                <button type="button" onclick="document.getElementById('file_ijazah').click()"
+                                    class="p-2 w-full text-center text-cyan-600 rounded-xl border md:w-auto bg-cyan-500/10 border-cyan-500/50">
+                                    Upload File
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
                 <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai -
-                        Opsional</label>
-                    <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
-                        <div class="flex items-center gap-3">
-                            <img src="{{ isset($file_transkrip) ? asset( $file_transkrip->file) : asset('image/default.png') }}"
-                                alt="Transkrip 1 Preview" class="object-cover rounded-lg min-w-48 h-28"
-                                id="transkrip1Preview">
-                            <div>
-                                <p class="text-sm text-gray-500 truncate" id="transkrip1FileName">
+                    <label class="block mb-2 font-semibold text-gray-700">File Transkrip Nilai - Opsional</label>
+                    <div class="flex flex-col gap-4 items-center p-4 w-full bg-gray-50 rounded-xl border md:flex-row md:justify-between">
+                        <div class="flex gap-3 items-center">
+                            <img src="{{ asset('image/pdf.png') }}" alt="" class="object-cover w-12 h-12 rounded-lg" id="transkripPreview">
+                            <div class="flex flex-col">
+                                <p class="text-sm text-gray-500 truncate" id="transkripFileName">
                                     {{ isset($file_transkrip) ? $file_transkrip->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
                                 @if (isset($file_transkrip))
-                                    <a href="{{ asset( $file_transkrip->file) }}" target="_blank"
-                                        class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
+                                    <a href="{{ asset( $file_transkrip->file) }}" target="_blank" class="text-sm text-cyan-600 hover:underline">Lihat File</a>
                                 @endif
                             </div>
                         </div>
-                        <input type="number" name="input_transkrip" id="input_transkrip"
-                            class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
-                            placeholder="Input Jumlah Transkrip">
-                        <input type="file" name="file_transkrip" id="file_transkrip"
-                            class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('file_transkrip', 'transkrip1Preview', 'transkrip1FileName')">
-                        <button type="button" onclick="document.getElementById('file_transkrip').click()"
-                            class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
-                            Pilih File Transkrip 1
-                        </button>
+                        <div class="flex flex-col gap-3 items-center md:flex-row">
+                            <input type="number" name="input_transkrip" id="input_transkrip" value="{{ $file_transkrip->jumlah ?? 1 }}"
+                                class="p-2 w-full text-gray-700 bg-gray-100 rounded-xl border border-gray-200 md:w-32"
+                                placeholder="Jumlah Transkrip">
+                            <div class="relative w-full md:w-auto">
+                                <input type="file" name="file_transkrip" id="file_transkrip" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    onchange="updatePreview('file_transkrip', 'transkripPreview', 'transkripFileName')">
+                                <button type="button" onclick="document.getElementById('file_transkrip').click()"
+                                    class="p-2 w-full text-center text-cyan-600 rounded-xl border md:w-auto bg-cyan-500/10 border-cyan-500/50">
+                                    Upload File
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-
                 <div class="mb-6">
-                    <label class="block mb-2 font-semibold text-gray-700">Akta Mengajar -
-                        Opsional</label>
-                    <div class="flex items-center gap-3 p-2 border rounded-xl bg-gray-50">
-                        <div class="flex items-center gap-3">
-
-                            <img src="{{ isset($file_akta) ? asset( $file_akta->file) : asset('image/default.png') }}"
-                                alt="Transkrip 2 Preview" class="object-cover rounded-lg min-w-48 h-28"
-                                id="aktaMengajarPreview">
-                            <div>
+                    <label class="block mb-2 font-semibold text-gray-700">Akta Mengajar - Opsional</label>
+                    <div class="flex flex-col gap-4 items-center p-4 w-full bg-gray-50 rounded-xl border md:flex-row md:justify-between">
+                        <div class="flex gap-3 items-center">
+                            <img src="{{ asset('image/pdf.png') }}" alt="" class="object-cover w-12 h-12 rounded-lg" id="aktaMengajarPreview">
+                            <div class="flex flex-col">
                                 <p class="text-sm text-gray-500 truncate" id="aktaMengajarFileName">
                                     {{ isset($file_akta) ? $file_akta->file_name : 'Tidak ada file yang diunggah' }}
                                 </p>
                                 @if (isset($file_akta))
-                                    <a href="{{ asset( $file_akta->file) }}" target="_blank"
-                                        class="text-sm text-cyan-600 hover:underline">Lihat Gambar</a>
+                                    <a href="{{ asset( $file_akta->file) }}" target="_blank" class="text-sm text-cyan-600 hover:underline">Lihat File</a>
                                 @endif
                             </div>
                         </div>
-                        <input type="number" name="input_akta" id="input_akta"
-                        class="p-2 text-gray-700 bg-gray-100 border border-gray-200 rounded-xl"
-                        placeholder="Input Jumlah akta">
-                        <input type="file" name="file_akta" id="file_akta"
-                            class="w-full h-full opacity-0 cursor-pointer"
-                            onchange="updatePreview('file_akta', 'aktaMengajarPreview', 'aktaMengajarFileName')">
-                        <button type="button" onclick="document.getElementById('file_akta').click()"
-                            class="w-1/2 p-2 border rounded-xl bg-cyan-500/10 border-cyan-500/50 text-cyan-600">
-                            Pilih File Akta Mengajar
-                        </button>
+                        <div class="flex flex-col gap-3 items-center md:flex-row">
+                            <input type="number" name="input_akta" id="input_akta" value="{{ $file_akta->jumlah ?? 1 }}"
+                                class="p-2 w-full text-gray-700 bg-gray-100 rounded-xl border border-gray-200 md:w-32"
+                                placeholder="Jumlah Akta">
+                            <div class="relative w-full md:w-auto">
+                                <input type="file" name="file_akta" id="file_akta" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    onchange="updatePreview('file_akta', 'aktaMengajarPreview', 'aktaMengajarFileName')">
+                                <button type="button" onclick="document.getElementById('file_akta').click()"
+                                    class="p-2 w-full text-center text-cyan-600 rounded-xl border md:w-auto bg-cyan-500/10 border-cyan-500/50">
+                                    Upload File
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="flex justify-end gap-3">
+
+
+                <div class="flex gap-3 justify-end">
                     <button type="submit"
-                        class="px-6 py-2 text-white transition-all duration-300 bg-cyan-600 rounded-xl hover:bg-cyan-700 hover:shadow">
+                        class="px-6 py-2 text-white bg-cyan-600 rounded-xl transition-all duration-300 hover:bg-cyan-700 hover:shadow">
                         Upload
                     </button>
                 </div>
@@ -266,7 +250,7 @@
             const reader = new FileReader();
 
             reader.onload = function(e) {
-                document.getElementById(imgId).src = e.target.result;
+                // document.getElementById(imgId).src = e.target.result;
                 document.getElementById(fileNameId).textContent = file.name;
             };
 

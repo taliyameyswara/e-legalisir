@@ -18,8 +18,7 @@ return new class extends Migration
             $table->string('file');
             $table->string('type');
             $table->boolean('is_active')->default(true);
-            $table->integer('jumlah_legalisir')->default(1);
-            $table->string('thumbnail')->nullable();
+            $table->integer('jumlah')->default(1);
             $table->timestamps();
         });
     }

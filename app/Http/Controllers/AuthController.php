@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\User;
+use App\Services\LogServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    protected $logServices;
+    public function __construct(LogServices $logServices)
+    {
+        $this->logServices = $logServices;
+    }
     public function showAdminLogin()
     {
         return view('auth.admin-login');
@@ -28,9 +34,6 @@ class AuthController extends Controller
             'name' => 'required|string',
             'nim' => 'required|string|unique:users,nim',
             'program_studi' => 'required|string',
-            // 'tanggal_lahir' => 'required|date',
-            // 'tempat_lahir' => 'required|string',
-            // 'nomor_ijazah' => 'required|string',
         ]);
 
         $user = User::create([
@@ -39,14 +42,16 @@ class AuthController extends Controller
             'role' => 'mahasiswa',
         ]);
 
+        $program_studi = explode(' ', $request->program_studi);
+        $sarjana = $program_studi[0];
+
         Student::create([
             'user_id' => $user->id,
             'program_studi' => $request->program_studi,
-            // 'tanggal_lahir' => $request->tanggal_lahir,
-            // 'tempat_lahir' => $request->tempat_lahir,
-            // 'nomor_ijazah' => $request->nomor_ijazah,
+            'sarjana' => $sarjana,
         ]);
 
+        $this->logServices->createLog('Register', 'User melakukan registrasi', $user->id);
         return redirect()->route('login')->with('success', 'Registrasi Berhasil');
     }
 
@@ -55,12 +60,24 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
+            'captcha' => 'required|captcha',
         ]);
 
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            return redirect()->route('admin.index');
+            if(Auth::user()->role !== 'admin' && Auth::user()->role !== 'superadmin') {
+                Auth::logout();
+                return redirect()->back()->withErrors(['error' => 'Anda tidak memiliki akses ke halaman ini']);
+            }
+            if (Auth::user()->role === 'superadmin') {
+                $this->logServices->createLog('Login', 'Superadmin melakukan login', Auth::user()->id);
+                return redirect()->route('superadmin.index');
+            }
+            if (Auth::user()->role === 'admin') {
+                $this->logServices->createLog('Login', 'Admin melakukan login', Auth::user()->id);
+                return redirect()->route('admin.index');
+            }
         }
 
         return redirect()->back()->withErrors(['error' => 'Email atau password salah']);
@@ -71,6 +88,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string',
             'nim' => 'required|string',
+            'captcha' => 'required|captcha',
         ]);
 
         $credentials = $request->only('name', 'nim');
@@ -81,8 +99,10 @@ class AuthController extends Controller
 
         if ($user && $user->role === 'mahasiswa') {
             Auth::login($user);
+            $this->logServices->createLog('Login', 'User melakukan login', $user->id);
             return redirect()->route('mahasiswa.index');
         }
+
 
         return redirect()->back()->withErrors(['error' => 'Nama atau NIM salah']);
     }
@@ -96,7 +116,10 @@ class AuthController extends Controller
 
     public function logout()
     {
+        $this->logServices->createLog('Logout', 'User melakukan logout', Auth::user()->id);
+
         Auth::logout();
+
         return redirect()->route('login')->with('success', 'Logout Berhasil');
     }
 }

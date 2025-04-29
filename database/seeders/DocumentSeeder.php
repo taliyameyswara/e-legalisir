@@ -15,21 +15,5 @@ class DocumentSeeder extends Seeder
     public function run()
     {
 
-
-
-
-
-        // Document::create([
-        //     'user_id' => $mahasiswa->id,
-        //     'nim' => $mahasiswa->nim,
-        //     'nama' => $mahasiswa->name,
-        //     'tanggal_lahir' => '2000-01-01',
-        //     'tempat_lahir' => 'Jakarta',
-        //     'program_studi' => 'Informatika',
-        //     'nomor_sk_rektor' => 'SKR-12345',
-        //     'nomor_ijazah' => 'IJZ-98765',
-        //     'status' => 'pending',
-
-        // ]);
     }
 }

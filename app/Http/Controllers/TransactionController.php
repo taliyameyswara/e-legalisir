@@ -4,16 +4,40 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use App\Models\Transaction;
+use App\Services\LogServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
+    protected $logServices;
+    public function __construct(LogServices $logServices)
+    {
+        $this->logServices = $logServices;
+    }
     public function index()
     {
         $user = Auth::user();
         $transactions = $user->transactions()->get();
         return view('mahasiswa.transaksi.index', compact('transactions'));
+    }
+
+    public function kurir()
+    {
+        $transactions = Transaction::with([
+            'ijazah',
+            'transkrip',
+            'akta',
+            'user',
+            'province',
+            'city'
+        ])->where('user_id', Auth::user()->id)
+        ->where(function ($query) {
+            $query->where('status', 'pengiriman')
+                  ->orWhere('status', 'selesai');
+        })
+        ->get();
+        return view('mahasiswa.kurir.index', compact('transactions'));
     }
 
     public function create()
@@ -24,7 +48,6 @@ class TransactionController extends Controller
             !$student->tempat_lahir ||
             !$student->tanggal_lahir ||
             !$student->program_studi ||
-            !$student->nomor_sk_rektor ||
             !$student->nomor_ijazah ||
             !$student->no_hp ||
             !$student->province_id ||
@@ -36,11 +59,10 @@ class TransactionController extends Controller
         }
 
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
-        $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
-        $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
+        $file_transkrip = Document::where('user_id', $user->id)->where('type', 'file_transkrip')->where('is_active', true)->first();
         $file_akta = Document::where('user_id', $user->id)->where('type', 'file_akta')->where('is_active', true)->first();
 
-        return view('mahasiswa.transaksi.create', compact('file_ijazah', 'file_transkrip_1', 'file_transkrip_2', 'file_akta'));
+        return view('mahasiswa.transaksi.create', compact('file_ijazah', 'file_transkrip', 'file_akta'));
     }
 
     public function store(Request $request)
@@ -50,18 +72,23 @@ class TransactionController extends Controller
             'no_hp' => 'required|string',
             'province_id' => 'required|string',
             'city_id' => 'required|string',
-            'alamat_pengiriman' => 'required|string',
             'kode_pos' => 'required|string',
-            'jumlah_legalisir' => 'required|integer|min:1|max:10',
-            'tipe_pengiriman' => 'required|string',
+            'jumlah_ijazah' => 'required|integer|min:1|max:10',
+            'jumlah_transkrip' => 'nullable|integer|min:1|max:10',
+            'jumlah_akta' => 'nullable|integer|min:1|max:10',
+            // 'shipping_method' => 'required|string',
+            'alamat_pengiriman' => 'required|string',
         ]);
 
+        // $shipping_method = $request->shipping_method;
+
+        // $parts = explode('|', $shipping_method);
+        // $pengiriman = trim($parts[0]);
+        // $harga_pengiriman = (int) trim($parts[1]);
+
         $user = Auth::user();
+        $sarjana = $user->student->sarjana;
 
-        // Ambil program studi mahasiswa dari tabel student
-        $program_studi = $user->student->program_studi ?? '';
-
-        // Cek apakah ada akta mengajar
         $file_akta = Document::where('user_id', $user->id)
             ->where('type', 'file_akta')
             ->where('is_active', true)
@@ -74,28 +101,36 @@ class TransactionController extends Controller
         if ($file_akta) {
             $biaya_akta = 10000;
         }
-            // Jika tidak ada akta, biaya tergantung jenjang studi
-            if (str_contains($program_studi, 'Sarjana')) {
-                $biaya_legalisir = 5000;
-            } elseif (str_contains($program_studi, 'Magister') || str_contains($program_studi, 'Doktor')) {
-                $biaya_legalisir = 10000;
-            } else {
-                $biaya_legalisir = 5000; // Default jika tidak sesuai
-            }
+        if($sarjana == 'Sarjana'){
+            $biaya_legalisir = 5000;
+        } elseif ($sarjana == 'Magister' || $sarjana == 'Doktor') {
+            $biaya_legalisir = 10000;
+        } else {
+            $biaya_legalisir = 5000;
+        }
 
-        $total_biaya_sementara = $biaya_akta + $biaya_legalisir;
-
-
-        // Hitung total biaya legalisir
-        $total_biaya_legalisir = $total_biaya_sementara * $request->jumlah_legalisir;
-
-        // Ambil dokumen terkait
         $file_ijazah = Document::where('user_id', $user->id)->where('type', 'file_ijazah')->where('is_active', true)->first();
-        $file_transkrip_1 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_1')->where('is_active', true)->first();
-        $file_transkrip_2 = Document::where('user_id', $user->id)->where('type', 'file_transkrip_2')->where('is_active', true)->first();
+        $file_transkrip = Document::where('user_id', $user->id)->where('type', 'file_transkrip')->where('is_active', true)->first();
+        $file_akta = Document::where('user_id', $user->id)->where('type', 'file_akta')->where('is_active', true)->first();
 
-        // Simpan transaksi
-        $transaction = $user->transactions()->create([
+        $biaya_ijazah = 0;
+        $biaya_transkrip = 0;
+        $biaya_akta = 0;
+        if($file_ijazah){
+            $biaya_ijazah = $biaya_legalisir * $request->jumlah_ijazah;
+        }
+        if($file_transkrip){
+            $biaya_transkrip = $biaya_legalisir * $request->jumlah_transkrip;
+        }
+        if($file_akta){
+            $biaya_akta = $biaya_legalisir * $request->jumlah_akta;
+        }
+
+        $biaya_legalisir = $biaya_ijazah + $biaya_transkrip + $biaya_akta;
+        // $total_pembayaran = $biaya_legalisir + $harga_pengiriman;
+        $total_pembayaran = $biaya_legalisir;
+
+        $user->transactions()->create([
             'nama_penerima' => $request->nama_penerima,
             'no_hp' => $request->no_hp,
             'province_id' => $request->province_id,
@@ -103,14 +138,27 @@ class TransactionController extends Controller
             'alamat_pengiriman' => $request->alamat_pengiriman,
             'kode_pos' => $request->kode_pos,
             'status' => 'menunggu acc',
+
             'file_ijazah' => $file_ijazah ? $file_ijazah->id : null,
-            'file_transkrip_1' => $file_transkrip_1 ? $file_transkrip_1->id : null,
-            'file_transkrip_2' => $file_transkrip_2 ? $file_transkrip_2->id : null,
+            'file_transkrip' => $file_transkrip ? $file_transkrip->id : null,
             'file_akta' => $file_akta ? $file_akta->id : null,
-            'jumlah_pembayaran' => $total_biaya_legalisir,
-            'jumlah_legalisir' => $request->jumlah_legalisir,
-            'tipe_pengiriman' => $request->tipe_pengiriman,
+
+            'jumlah_ijazah' => $request->jumlah_ijazah,
+            'jumlah_transkrip' => $request->jumlah_transkrip ? $request->jumlah_transkrip : 0,
+            'jumlah_akta' => $request->jumlah_akta ? $request->jumlah_akta : 0,
+            // 'pengiriman' => $pengiriman,
+
+            // 'biaya_ongkir' => $harga_pengiriman,
+            'biaya_legalisir' => $biaya_legalisir,
+            'total_pembayaran' => $total_pembayaran,
+            'harga_packing' => 21000,
         ]);
+
+        $this->logServices->createLog(
+            'Pengajuan',
+            'Pengajuan baru dibuat dengan ID: ' . $user->transactions()->latest()->first()->id,
+            $user->id
+        );
 
         return redirect()->route('mahasiswa.transaksi.index');
     }
@@ -120,12 +168,10 @@ class TransactionController extends Controller
         $request->validate([
             'nama_penerima' => 'required|string',
             'no_hp' => 'required|string',
-            // 'province_id' => 'required|string',
-            // 'city_id' => 'required|string',
-            // 'alamat_pengiriman' => 'required|string',
-            // 'kode_pos' => 'required|string',
-            'jumlah_legalisir' => 'required|integer|min:1|max:10',
-            'tipe_pengiriman' => 'required|string',
+
+            'jumlah_ijazah' => 'required|integer|min:1|max:10',
+            'jumlah_transkrip' => 'nullable|integer|min:1|max:10',
+            'jumlah_akta' => 'nullable|integer|min:1|max:10',
         ]);
 
         $user = Auth::user();
@@ -172,7 +218,6 @@ class TransactionController extends Controller
             'file_akta' => $file_akta ? $file_akta->id : null,
             'jumlah_pembayaran' => $total_biaya_legalisir,
             'jumlah_legalisir' => $request->jumlah_legalisir,
-            'tipe_pengiriman' => $request->tipe_pengiriman,
         ]);
 
         return redirect()->route('mahasiswa.transaksi.index');
@@ -183,10 +228,6 @@ class TransactionController extends Controller
     public function detail($id)
     {
         $transaction = Transaction::find($id);
-        $transaction->file_ijazah = Document::find($transaction->file_ijazah);
-        $transaction->file_transkrip_1 = Document::find($transaction->file_transkrip_1);
-        $transaction->file_transkrip_2 = Document::find($transaction->file_transkrip_2);
-        $transaction->file_akta = Document::find($transaction->file_akta);
         return view('mahasiswa.transaksi.detail', compact('transaction'));
     }
 
@@ -206,6 +247,12 @@ class TransactionController extends Controller
             'status' => 'proses legalisir',
         ]);
 
+        $this->logServices->createLog(
+            'Upload Bukti Pembayaran',
+            'Bukti pembayaran diunggah untuk transaksi ID: ' . $transactionId,
+            Auth::id()
+        );
+
         return redirect()->route('mahasiswa.transaksi.detail', $transactionId)
             ->with('success', 'Bukti pembayaran berhasil diunggah.');
     }
@@ -224,6 +271,14 @@ class TransactionController extends Controller
             'status' => 'selesai',
         ]);
 
+        $this->logServices->createLog(
+            'Terima Dokumen',
+            'Dokumen legalisir diterima untuk transaksi ID: ' . $id,
+            Auth::id()
+        );
+
         return redirect()->route('mahasiswa.transaksi.index')->with('success', 'Dokumen legalisir berhasil diterima.');
     }
+
+
 }
